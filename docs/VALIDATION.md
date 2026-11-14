@@ -1,5 +1,21 @@
 # Desktop beta validation
 
+## Beta 2
+
+115 Node checks passed. The real Electron/Chromium test compares supplied tracks with engine output for all five sizes and both colors, windowed and fullscreen (20 comparisons). It also covers source changes, site CC controls, reload persistence and zero website caption-preference writes. Compact/Return preserves the same window, video, source, clock, pause state and original window bounds, without invoking the website popup.
+
+The live site was also checked inside the desktop app: supplied-caption size/color changed, the compact screen and transport remained visible, and the website caption-preference write count stayed zero. These changes are desktop-only; no website source or deployment was changed.
+
+Both Mac architectures and Debian 13, Fedora 43 and Arch passed the Beta 2 build and package checks described below, including the new appearance/compact test. All platform downloads were checked against their build SHA-256 manifests before upload. Windows packaged helpers and the NSIS installer/feed checks passed locally. The production update feed resolves Beta 2 without a download or downgrade; an installed Beta 1-to-2 upgrade still needs a separate end-to-end installer test. Mac/Linux use replacement installers/packages.
+
+- [Windows Beta 2 build and UI checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43649867027)
+- [Mac Beta 2 builds and checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43648559729)
+- [Linux Beta 2 installation checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43648562793)
+
+The original Windows CI attempt stopped before the UI test because its executable path resolved to multiple output lines. The linked rerun explicitly installs Electron and uses its executable path; app runtime code did not change for that correction.
+
+The sections below record the original Beta 1 checks and platform limitations.
+
 ## Windows
 
 110 Node checks passed, including stream-first caption selection, live playback preservation, audio/controls/timestamps/source validation and update decisions. The real sandboxed Electron app opened the live site with Pixel Deck, exposed no window.require, and initialized its caption policy without renderer/preload errors. Screenshots are in docs/screenshots.

@@ -2,20 +2,20 @@
 
 A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
 
-**[Windows Beta 2 is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.2)** with unified caption styling and the single-window compact player. Use Help → Check for app updates in the Windows app. Mac/Linux Beta 2 checks are finishing; the table below remains Beta 1 until all replacements are verified.
+**[Windows Beta 2 is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.2)** with unified caption styling and the single-window compact player. Use Help → Check for app updates in the Windows app. Mac and Linux downloads include the same fixes; install the replacement package for your platform.
 
-## Download · 0.1.0 Beta 1
+## Download · 0.1.0 Beta 2
 
 | Your computer | Download | Install instructions |
 | --- | --- | --- |
-| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
-| Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
-| Mac · Intel · macOS 14.2+ | **[Download Intel Mac (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Mac-x64.dmg)** | [Mac guide](docs/MAC.md) |
-| Debian/Ubuntu · Intel/AMD 64-bit | **[Download Debian (.deb)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Debian-amd64.deb)** | [Debian guide](docs/LINUX.md#debian-and-ubuntu) |
-| Fedora · Intel/AMD 64-bit | **[Download Fedora (.rpm)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Fedora-x86_64.rpm)** | [Fedora guide](docs/LINUX.md#fedora) |
-| Arch Linux · Intel/AMD 64-bit | **[Download Arch (.pkg.tar.xz)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Arch-x64.pkg.tar.xz)** | [Arch guide](docs/LINUX.md#arch-linux) |
+| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
+| Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
+| Mac · Intel · macOS 14.2+ | **[Download Intel Mac (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Mac-x64.dmg)** | [Mac guide](docs/MAC.md) |
+| Debian/Ubuntu · Intel/AMD 64-bit | **[Download Debian (.deb)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Debian-amd64.deb)** | [Debian guide](docs/LINUX.md#debian-and-ubuntu) |
+| Fedora · Intel/AMD 64-bit | **[Download Fedora (.rpm)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Fedora-x86_64.rpm)** | [Fedora guide](docs/LINUX.md#fedora) |
+| Arch Linux · Intel/AMD 64-bit | **[Download Arch (.pkg.tar.xz)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Arch-x64.pkg.tar.xz)** | [Arch guide](docs/LINUX.md#arch-linux) |
 
-[All release files and checksums](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.1) · [Caption help](docs/CAPTIONS.md) · [Audio settings](docs/AUDIO.md) · [Report a problem](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/issues)
+[All release files and checksums](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.2) · [Caption help](docs/CAPTIONS.md) · [Audio settings](docs/AUDIO.md) · [Report a problem](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/issues)
 
 Install the package for your computer, rather than GitHub’s Source code ZIP. The Windows beta is unsigned; macOS builds are ad-hoc signed and not Apple-notarized. Internet is required for streams. Speech models are included in the installers.
 
