@@ -77,7 +77,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     });
 
     const contents = win.webContents;
-    const windowMode=createWindowMode({win,ipcMain,screen,errorPage,allowOnTop:!(process.platform==='linux'&&process.env.WAYLAND_DISPLAY)});
+    const windowMode=createWindowMode({win,ipcMain,screen,Menu,errorPage,allowOnTop:!(process.platform==='linux'&&process.env.WAYLAND_DISPLAY)});
     let videoFullscreen = false;
     const updateFullscreenMenu = () => {
       const item = Menu.getApplicationMenu()?.getMenuItemById('video-fullscreen');
