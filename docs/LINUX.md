@@ -1,12 +1,12 @@
 # Linux installation
 
-The Linux x64 beta packages are being built and checked in Debian, Fedora and Arch environments. Direct downloads will appear on the [front page](../README.md) after those checks pass. Use a normal desktop session with audio support; internet is needed for streams.
+The Linux x64 beta packages passed installation, caption recognition and startup checks on Debian 13, Fedora 43 and Arch. Direct downloads are on the [front page](../README.md). Use a normal desktop session with audio support; internet is needed for streams.
 
 Download the matching package from the [release page](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.1), then run the appropriate command in the folder containing it.
 
 ## Debian and Ubuntu
 
-Use the .deb package. Debian 12+ or a compatible Ubuntu desktop is the target; release validation includes Debian 13.
+[Download the Debian/Ubuntu .deb package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Debian-amd64.deb). Debian 12+ or a compatible Ubuntu desktop is the target; release validation includes Debian 13.
 
 ```sh
 sudo apt install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Debian-amd64.deb
@@ -14,7 +14,7 @@ sudo apt install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Debian-amd64.deb
 
 ## Fedora
 
-Use the .rpm package. Release validation uses Fedora 43.
+[Download the Fedora .rpm package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Fedora-x86_64.rpm). Release validation uses Fedora 43.
 
 ```sh
 sudo dnf install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Fedora-x86_64.rpm
@@ -22,7 +22,7 @@ sudo dnf install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Fedora-x86_64.rpm
 
 ## Arch Linux
 
-Update Arch before installing the .pkg.tar.xz package:
+[Download the Arch .pkg.tar.xz package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Arch-x64.pkg.tar.xz). Update Arch before installing it:
 
 ```sh
 sudo pacman -Syu

@@ -1,12 +1,25 @@
-# Initial Windows validation
+# Desktop beta validation
 
-110 Node checks passed: reused audio/controls/timestamp/source validation plus Rabbit Ears stream-first caption selection, live playback preservation and updater decisions. The sandboxed preload exposes no Node/IPC functions to the remote website. Its availability messages are accepted only from the pinned main frame.
+## Windows
 
-The packaged caption helpers passed actual base/tiny English recognition, timestamped cue output, silence-aware clocks, the packaged FFmpeg-to-Whisper read-ahead pipeline, HTTPS support and process cleanup. The real Electron audio check passed all ten EQ bands, Pre/Post EQ, makeup, denoising, presets and save/reopen persistence.
+110 Node checks passed, including stream-first caption selection, live playback preservation, audio/controls/timestamps/source validation and update decisions. The real sandboxed Electron app opened the live site with Pixel Deck, exposed no window.require, and initialized its caption policy without renderer/preload errors. Screenshots are in docs/screenshots.
 
-Existing site tracks are preferred; loading tracks stop the fallback and broken tracks permit it. Burned-in captions are signaled read-only by the site. Native Windows Live Captions still needs the Windows 11 OS feature and any required language pack; that feature is not provisioned by this installer.
+Packaged helpers passed actual base/tiny English recognition, timestamped cue output, silence-aware clocks, the packaged FFmpeg-to-Whisper read-ahead pipeline, HTTPS support and process cleanup. The real Electron audio panel passed all ten EQ bands, Pre/Post EQ, makeup, denoising, presets and save/reopen persistence.
 
-The initial release includes update feed metadata and controller tests. A genuine later-version NSIS update and settings migration must be tested when beta.2 exists. macOS/Linux Rabbit Ears installers have not been tested or released.
+## Mac
 
-The real sandboxed Electron app opened the live Rabbit Ears site, selected Pixel Deck, exposed no window.require, and initialized its caption policy without renderer/preload errors. Screenshots are in docs/screenshots.
-The public beta feed was checked with the real electron-updater/Electron HTTP client after publishing. It resolved 0.1.0-beta.1 as the current version, did not download anything and rejected downgrades. The public installer URL returned HTTP 200 with the expected file size, and GitHub's uploaded SHA-256 digest matched SHA256SUMS.txt. A real later-version installation still needs the beta.2 upgrade test described in RELEASING.md.
+Both Apple Silicon (macos-15 runner) and Intel (macos-15-intel runner) passed unit tests, real Chromium audio/settings tests, packaged speech/model/FFmpeg tests, deep/strict code-signature verification, audio-capture helper checks and app startup. Their DMG and ZIP downloads were verified against the build checksums before publication. These are ad-hoc signed, not Apple-notarized builds; minimum configured OS is 14.2 and execution checks ran on macOS 15.
+
+[Mac build and checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43645303965).
+
+## Linux
+
+The three x64 package formats were built on Ubuntu 22.04 with the bundled engines/models. Each was installed into its matching clean container: Debian 13, Fedora 43 and Arch Linux. All three passed recorded recognition, timestamped recognition under varied allocation patterns, the FFmpeg caption pipeline/audio-filter checks and GUI app startup under Xvfb. Only the isolated container smoke test disables Chromium sandboxing; installed launchers retain it. Public package checksums were verified before upload. Ubuntu is a compatible Debian-package target, not a separately executed validation environment.
+
+[Linux packages and installation checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43645306408).
+
+## Captions and updates
+
+Existing stream tracks are preferred; loading tracks stop the fallback and broken tracks permit it. Burned-in captions are signaled read-only by the site. Windows Live Captions requires Windows 11 and any OS speech-language files; this installer does not provision that feature.
+
+The published Windows beta feed was checked using the real electron-updater/Electron HTTP client. It resolved 0.1.0-beta.1 without downloading or allowing downgrade. The installer URL returned HTTP 200 with the expected size and its uploaded SHA-256 matched SHA256SUMS.txt. A later-version installation still needs the beta.2 upgrade test described in RELEASING.md. Mac/Linux currently update through replacement installers/packages, not automatic installation.
