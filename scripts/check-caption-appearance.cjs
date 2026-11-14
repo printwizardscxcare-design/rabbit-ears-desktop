@@ -30,6 +30,21 @@ app.whenReady().then(async()=>{try{
   await player.webContents.debugger.sendCommand('Input.dispatchMouseEvent',{type:'mousePressed',...pt,button:'left',clickCount:1});await player.webContents.debugger.sendCommand('Input.dispatchMouseEvent',{type:'mouseReleased',...pt,button:'left',clickCount:1});
   await until(()=>opened);submenu.closePopup(player);submenu.popup=nativePopup;await wait(50);
  }
+ console.log('Checking audio theme on open and live theme changes');
+ item('audio-settings').click();
+ const audio=BrowserWindow.getAllWindows().find(w=>w!==player);
+ await until(()=>audio.webContents.executeJavaScript('document.querySelectorAll(".band input").length===10&&document.body.dataset.skin==="pixel"').catch(()=>false));
+ const palette={pixel:['#1c293b','#32cec1'],retro:['#faf5e9','#a4462c'],theatre:['#251d29','#e2b967'],stadium:['#193427','#ffd36d'],modern:['#233140','#afd8fa'],cozy:['#48372d','#f7ca92'],metal:['#23262b','#ff7962'],ivory:['#fffaf2','#923b50'],gutter:['#232521','#d9fa32']};
+ for(const [skin,colors] of Object.entries(palette)){
+  await player.webContents.executeJavaScript('document.body.dataset.skin='+JSON.stringify(skin));
+  await until(()=>audio.webContents.executeJavaScript('document.body.dataset.skin==='+JSON.stringify(skin)));
+  const styled=await audio.webContents.executeJavaScript('(()=>{const s=getComputedStyle(document.body);return [s.getPropertyValue("--panel").trim(),s.getPropertyValue("--yellow").trim()]})()');assert.deepEqual(styled,colors);
+ }
+ assert.equal(fs.existsSync(path.join(profile,'audio.json')),false,'Theme changes must not write sound settings');audio.close();await wait(100);
+ // Opening after the selection must also use the currently selected theme.
+ item('audio-settings').click();const reopenedAudio=BrowserWindow.getAllWindows().find(w=>w!==player);
+ await until(()=>reopenedAudio.webContents.executeJavaScript('document.body.dataset.skin==="gutter"').catch(()=>false));reopenedAudio.close();await wait(100);
+ await player.webContents.executeJavaScript('document.body.dataset.skin="pixel"');
  console.log('Checking real caption styles');
  for(const full of [false,true]){
   console.log('Caption layout fullscreen='+full);
@@ -65,5 +80,5 @@ app.whenReady().then(async()=>{try{
   assert.deepEqual(player.getNormalBounds(),originalBounds);assert.equal(await player.webContents.executeJavaScript('getComputedStyle(document.getElementById("desktop-app-menu")).display'),'flex');assert.equal(BrowserWindow.getAllWindows().length,count);
  }
  assert.equal(await player.webContents.executeJavaScript('window.sitePreferenceWrites'),0);assert.equal(await player.webContents.executeJavaScript('localStorage.getItem("site-caption-test")'),null);
- console.log('PASS: Normal app menu headings open their native dropdowns, hide only in compact mode and return afterward. 20 real Chromium comparisons match stream and engine size/color; fullscreen, source changes, site controls and reload preserve preferences. Same-window compact/return preserves bounds, video, clock and pause state with the themed bezel and transport, without popup, reload or title bar.');clearTimeout(timeout);player.close();app.exit(0);
+ console.log('PASS: Audio follows all nine themes on open, while changing themes and after reopening without changing sound settings. Normal app menu headings open their native dropdowns, hide only in compact mode and return afterward. 20 real Chromium comparisons match stream and engine size/color; fullscreen, source changes, site controls and reload preserve preferences. Same-window compact/return preserves bounds, video, clock and pause state with the themed bezel and transport, without popup, reload or title bar.');clearTimeout(timeout);player.close();app.exit(0);
  }catch(e){console.error(e);clearTimeout(timeout);app.exit(1);}});

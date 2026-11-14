@@ -30,3 +30,17 @@ test('web pages, other windows, and subframes cannot read or write the Audio mem
   assert.equal(h.handlers.get('audio:save')(subframe,{}).ok,false);assert.equal(h.files.size,0);
   h.manager.destroy();assert.equal(h.handlers.size,0);
 });
+
+test('audio window follows only the player theme without saving or changing sound',()=>{
+ const h=setup(),event=h.event(h.parent.webContents),sound=structuredClone(h.manager.snapshot().config);
+ h.ipc.emit('desktop:theme',event,'gutter');assert.equal(h.manager.snapshot().theme,'gutter');h.manager.open();
+ assert.equal(h.handlers.get('audio:load')(h.event(h.panel.webContents)).theme,'gutter');
+ for(const skin of ['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']){
+  h.ipc.emit('desktop:theme',event,skin);assert.equal(h.manager.snapshot().theme,skin);assert.deepEqual(h.panel.webContents.messages.at(-1),['audio:theme',skin]);
+ }
+ h.ipc.emit('desktop:theme',event,'unknown');h.ipc.emit('desktop:theme',{...event,senderFrame:{url:'https://rabbit-ears.stream/'}},'retro');
+ h.ipc.emit('desktop:theme',h.event(h.panel.webContents),'retro');assert.equal(h.manager.snapshot().theme,'gutter');
+ assert.deepEqual(h.manager.snapshot().config,sound);assert.equal(h.files.size,0);
+ h.panel.close();h.manager.open();assert.equal(h.handlers.get('audio:load')(h.event(h.panel.webContents)).theme,'gutter');
+ h.manager.destroy();assert.equal(h.ipc.listenerCount('desktop:theme'),0);
+});

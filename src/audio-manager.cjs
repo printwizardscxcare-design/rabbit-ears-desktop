@@ -8,16 +8,21 @@ const {isSite} = require('./policy.cjs');
 function createAudioManager({win, BrowserWindow, ipcMain, profileDir, platform, io=fs, onCleanup=()=>{}}) {
   const player=win.webContents, file=path.join(profileDir,'audio.json'), html=path.join(__dirname,'audio.html');
   const settingsUrl=pathToFileURL(html).href;
-  let current=model.config(), panel=null, status={text:'Original sound'};
+  let current=model.config(), panel=null, status={text:'Original sound'}, theme='pixel';
+  const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
   try {current=model.config(JSON.parse(io.readFileSync(file,'utf8')));} catch {}
   onCleanup(current.cleanup);
   const fromPlayer = event => event.sender===player && event.senderFrame===player.mainFrame && isSite(event.senderFrame?.url);
   const fromPanel = event => panel && !panel.isDestroyed() && event.sender===panel.webContents && event.senderFrame===panel.webContents.mainFrame && event.senderFrame?.url===settingsUrl;
   const push = () => {if (!win.isDestroyed() && isSite(player.getURL())) player.send('desktop:audio-state',current.current);};
-  const snapshot = () => ({config:current,presets:model.PRESETS,status});
+  const snapshot = () => ({config:current,presets:model.PRESETS,status,theme});
+  const receiveTheme=(event,value)=>{
+    if(!fromPlayer(event)||!skins.has(value)||value===theme)return;
+    theme=value;if(panel&&!panel.isDestroyed())panel.webContents.send('audio:theme',theme);
+  };
   function open() {
     if (panel && !panel.isDestroyed()) {panel.focus();return;}
-    panel=new BrowserWindow({width:960,height:850,minWidth:750,minHeight:620,title:'Audio — Rabbit-Ears.stream Desktop',backgroundColor:'#1c0a57',
+    panel=new BrowserWindow({width:960,height:850,minWidth:750,minHeight:620,title:'Audio — Rabbit-Ears.stream Desktop',backgroundColor:'#101725',
       webPreferences:{preload:path.join(__dirname,'audio-preload.cjs'),partition:'audio-settings',nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
     if (platform!=='darwin') panel.setMenu(null);
     panel.webContents.setIgnoreMenuShortcuts(true);
@@ -46,10 +51,10 @@ function createAudioManager({win, BrowserWindow, ipcMain, profileDir, platform, 
     if (panel && !panel.isDestroyed()) panel.webContents.send('audio:status',status);
   };
   const close = event => {if (fromPanel(event)) panel.close();};
-  ipcMain.on('audio:ready',ready);ipcMain.on('audio:status',receiveStatus);ipcMain.on('audio:close',close);
+  ipcMain.on('audio:ready',ready);ipcMain.on('audio:status',receiveStatus);ipcMain.on('audio:close',close);ipcMain.on('desktop:theme',receiveTheme);
   ipcMain.handle('audio:load',load);ipcMain.handle('audio:save',save);player.on('did-finish-load',push);
   function destroy() {
-    ipcMain.removeListener('audio:ready',ready);ipcMain.removeListener('audio:status',receiveStatus);ipcMain.removeListener('audio:close',close);
+    ipcMain.removeListener('audio:ready',ready);ipcMain.removeListener('audio:status',receiveStatus);ipcMain.removeListener('audio:close',close);ipcMain.removeListener('desktop:theme',receiveTheme);
     ipcMain.removeHandler('audio:load');ipcMain.removeHandler('audio:save');player.removeListener('did-finish-load',push);
     if (panel && !panel.isDestroyed()) panel.close();
   }

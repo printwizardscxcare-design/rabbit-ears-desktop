@@ -1,6 +1,7 @@
 'use strict';
 module.exports=function installWindowChrome({ipcRenderer,document,window}){
- let state={compact:false,maximized:false,menus:[]};
+ let state={compact:false,maximized:false,menus:[]},lastSkin;
+ function publishTheme(){const skin=document.body?.dataset.skin||'pixel';if(skin!==lastSkin){lastSkin=skin;ipcRenderer.send('desktop:theme',skin);}}
  function openMenu(button){
   if(state.compact)return;const r=button.getBoundingClientRect();
   ipcRenderer.send('desktop:menu-open',{index:Number(button.dataset.menuIndex),x:r.left,y:r.bottom});
@@ -22,7 +23,7 @@ module.exports=function installWindowChrome({ipcRenderer,document,window}){
  function apply(){
   if(!document.body)return;if(state.compact&&document.body.dataset.mode&&document.body.dataset.mode!=='tv')document.getElementById('tabTv')?.click();
   document.body.classList.toggle('desktop-compact',state.compact);
-  renderMenus();
+  renderMenus();publishTheme();
   const toggle=document.getElementById('popoutTv');if(toggle){toggle.title=state.compact?'Return to app':'Compact player';toggle.setAttribute('aria-label',toggle.title);}
   const maximize=document.getElementById('desktop-window-maximize');if(maximize){maximize.title=state.maximized?'Restore window':'Maximize window';maximize.setAttribute('aria-label',maximize.title);}
  }
@@ -41,5 +42,6 @@ module.exports=function installWindowChrome({ipcRenderer,document,window}){
  document.addEventListener('click',event=>{if(event.target.closest?.('#popoutTv')){event.preventDefault();event.stopImmediatePropagation();ipcRenderer.send('desktop:window-action','compact');}},true);
  document.addEventListener('keydown',event=>{if(!event.isTrusted||state.compact||!event.altKey||event.ctrlKey||event.metaKey)return;const key=event.key.toLowerCase();const button=[...document.querySelectorAll('#desktop-app-menu button:not(:disabled)')].find(b=>b.dataset.mnemonic===key);if(button){event.preventDefault();event.stopImmediatePropagation();button.focus();openMenu(button);}},true);
  document.addEventListener('DOMContentLoaded',ready,{once:true});if(document.readyState!=='loading')ready();
- const timer=window.setInterval(apply,500);window.addEventListener('beforeunload',()=>window.clearInterval(timer),{once:true});
+ const observer=new window.MutationObserver(publishTheme);function observeTheme(){if(document.body){observer.observe(document.body,{attributes:true,attributeFilter:['data-skin']});publishTheme();}}document.addEventListener('DOMContentLoaded',observeTheme,{once:true});if(document.readyState!=='loading')observeTheme();
+ const timer=window.setInterval(apply,500);window.addEventListener('beforeunload',()=>{window.clearInterval(timer);observer.disconnect();},{once:true});
 };

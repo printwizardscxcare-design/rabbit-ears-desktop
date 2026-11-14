@@ -1,6 +1,10 @@
 'use strict';
 (async function() {
   const $=id=>document.getElementById(id), api=window.audioSettings, model=window.AudioModel;
+  const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
+  const applyTheme=skin=>{document.body.dataset.skin=skins.has(skin)?skin:'pixel';};
+  let receivedTheme=false;
+  api.onTheme(skin=>{receivedTheme=true;applyTheme(skin);});
   let config, presets=[], timer, saving=Promise.resolve(), lastStatus='Original sound', dirty=false;
   const signed=value=>`${value>0?'+':''}${Number(value).toFixed(1)} dB`;
   const message=(text,error=false)=>{$('status').textContent=text;$('status').classList.toggle('error',error);};
@@ -44,7 +48,7 @@
     config.current=model.settings(config.current);readouts();dirty=true;message('Saving…');clearTimeout(timer);timer=setTimeout(persist,120);
   }
   try {
-    const snapshot=await api.load();config=model.config(snapshot.config);lastStatus=snapshot.status.text;
+    const snapshot=await api.load();if(!receivedTheme)applyTheme(snapshot.theme);config=model.config(snapshot.config);lastStatus=snapshot.status.text;
     model.BANDS.forEach((frequency,i)=>{
       const band=document.createElement('div');band.className='band';
       const output=document.createElement('output');output.id=`band-value-${i}`;output.htmlFor=`band-${i}`;
