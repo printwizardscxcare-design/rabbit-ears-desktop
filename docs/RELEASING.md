@@ -12,4 +12,13 @@ This first Windows beta is unsigned. Add a Windows signing certificate in CI bef
 
 ## Mac and Linux release assets
 
-Run the Mac installers and Linux installers workflows on the release source. Publish Mac DMG/ZIP files only after both architecture jobs pass, and Linux packages only after the Debian, Fedora and Arch install/launch checks pass. Upload each platform’s SHA256SUMS file with its artifacts. Update the download table and platform guides to the exact published filenames, then check every public link. Keep Windows beta.yml unchanged when adding other-platform assets to the same beta. Mac/Linux beta updates currently use replacement installers/packages rather than automatic installation.
+Run the Mac installers and Linux installers workflows on the release source. Publish each Mac DMG/ZIP pair only after its architecture job passes, and Linux packages only after the Debian, Fedora and Arch install/launch checks pass. Upload each platform’s SHA256SUMS file with its artifacts. Update the download table and platform guides to the exact published filenames, then check every public link. Keep Windows beta.yml unchanged when adding other-platform assets to the same beta. Mac/Linux beta updates currently use replacement installers/packages rather than automatic installation.
+
+
+## Publish checked artifacts without local downloads
+
+After a beta release exists, run **Publish verified platform downloads** with its tag, successful build-run ID and artifact name. Accepted artifacts are `Rabbit-Ears-stream-Desktop-Mac-arm64`, `Rabbit-Ears-stream-Desktop-Mac-x64`, and `Rabbit-Ears-stream-Desktop-Linux-x64`.
+
+The publication job requires the correct build workflow and matching app version/source, packaging scripts and build workflow files. Each Mac architecture must have a successful job; Linux requires the complete build plus all three clean installation checks. The caption appearance test helper may differ because it is not shipped in the app; this permits test timing repairs without rebuilding unchanged app code merely to change test waits.
+
+It verifies the build's SHA-256 manifest, uploads its package files and checksum list, and checks every published GitHub digest. Existing assets are retained only if their digest already matches; mismatched files stop publication. It never replaces the Windows beta feed. This avoids transferring every platform's large artifacts through a developer's computer.

@@ -8,12 +8,12 @@ Open **Apple menu → About This Mac**:
 
 | Chip or processor | Choose |
 | --- | --- |
-| Apple M-series chip | [Download Apple Silicon / arm64 DMG](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Mac-arm64.dmg) |
-| Intel processor | [Download Intel / x64 DMG](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Mac-x64.dmg) |
+| Apple M-series chip | [Download Apple Silicon / arm64 DMG](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Mac-arm64.dmg) |
+| Intel processor | [Download Intel / x64 DMG](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Mac-x64.dmg) |
 
 ## Install and open
 
-1. Download the DMG for your processor from the [Rabbit Ears release page](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.2).
+1. Download the DMG for your processor from the [Rabbit Ears release page](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.5).
 2. Open it and drag **Rabbit-Ears.stream Desktop** into **Applications**.
 3. Eject the mounted disk image and open the app from Applications.
 
