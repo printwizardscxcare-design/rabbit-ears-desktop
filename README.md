@@ -1,6 +1,6 @@
 # Rabbit-Ears.stream Desktop
 
-A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/), adapted from the MIT-licensed Spelunkr Desktop engine.
+A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
 
 ## Windows beta
 
@@ -34,7 +34,3 @@ Future releases must publish the NSIS installer, its blockmap and beta.yml toget
 ## Development
 
 `npm ci`, then `npm start`. Build native caption helpers with `npm run build:captions`; build Windows installers with `npm run dist`. `npm test` checks caption precedence, nonblocking playback, controls, audio and update decisions. macOS/Linux engines are retained in source but this initial delivery is Windows x64; those packages are not validated Rabbit Ears releases.
-
-## Credits
-
-Based on [Spelunkr Desktop](https://github.com/printwizardscxcare-design/spelunkr-desktop). Its MIT notice is retained in LICENSE. Bundled FFmpeg, Whisper, GGML, Silero and model notices ship with the native resources; see native/WHISPER-NOTICES.md. Rabbit Ears artwork and programming remain subject to their respective rights.
