@@ -49,7 +49,7 @@ jobs:
           build_sha=$(jq -r .head_sha build.json)
           test "$(git show "$build_sha:package.json" | jq -r .version)" = "${RELEASE_TAG#v}"
           test "$(git show "$RELEASE_TAG:package.json" | jq -r .version)" = "${RELEASE_TAG#v}"
-          git diff --exit-code "$RELEASE_TAG" "$build_sha" -- src assets native package.json package-lock.json
+          git diff --exit-code "$RELEASE_TAG" "$build_sha" -- src assets native scripts package.json package-lock.json .github/workflows/mac.yml .github/workflows/linux.yml ':(exclude)scripts/check-caption-appearance.cjs'
           gh release view "$RELEASE_TAG" --json isPrerelease --jq .isPrerelease | grep -qx true
       - uses: actions/download-artifact@v4
         with:
@@ -68,7 +68,7 @@ jobs:
           esac
           cd incoming
           # Build manifests contain simple release basenames, never filesystem paths.
-          awk 'NF != 2 || $1 !~ /^[a-f0-9]+$/ || length($1) != 64 || $2 ~ /[\/\\]/ {exit 1}' "$manifest"
+          awk 'NF != 2 || $1 !~ /^[a-f0-9]+$/ || length($1) != 64 || $2 !~ /^[-A-Za-z0-9.]+$/ {exit 1}' "$manifest"
           sha256sum -c "$manifest"
           mapfile -t files < <(awk '{print $2}' "$manifest")
           files+=("$manifest")
@@ -84,7 +84,7 @@ jobs:
             else
               test "$existing" = "$local_hash"
             fi
-            remote_hash=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq ".assets[] | select(.name==\"$file\") | .digest")
+            remote_hash=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" | jq -r --arg name "$file" '.assets[] | select(.name==$name) | .digest')
             test "$remote_hash" = "$local_hash"
             printf '%s  %s\n' "$local_hash" "$file" >> "$GITHUB_STEP_SUMMARY"
           done
