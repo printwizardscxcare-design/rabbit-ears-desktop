@@ -2,7 +2,7 @@
 
 A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
 
-Beta 2 is being built with unified caption styling and the single-window compact player. Downloads below remain Beta 1 until each replacement is verified.
+**[Windows Beta 2 is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.2)** with unified caption styling and the single-window compact player. Use Help → Check for app updates in the Windows app. Mac/Linux Beta 2 checks are finishing; the table below remains Beta 1 until all replacements are verified.
 
 ## Download · 0.1.0 Beta 1
 
