@@ -50,11 +50,12 @@ app.whenReady().then(async()=>{try{
   console.log('Caption layout fullscreen='+full);
   if(full){await player.webContents.executeJavaScript('document.getElementById("screen").requestFullscreen()',true);await wait(100);}
   for(const size of [.8,1,1.25,1.5,2])for(const color of ['white','yellow']){
-   item('caption-size-'+size).click();item('caption-color-'+color).click();await wait(80);
+   item('caption-size-'+size).click();item('caption-color-'+color).click();await until(()=>player.webContents.executeJavaScript('getComputedStyle(document.querySelector(".caption-text")).color==='+JSON.stringify(color==='yellow'?'rgb(255, 235, 59)':'rgb(255, 255, 255)')));
    const supplied=await player.webContents.executeJavaScript('({font:getComputedStyle(document.querySelector(".caption-layer")).fontSize,color:getComputedStyle(document.querySelector(".caption-text")).color,source:document.getElementById("vid").currentSrc})');
    const expected=(full?Math.max(24,Math.min(80,(await player.webContents.executeJavaScript('innerHeight'))*.04)):20.8)*size;
    assert.ok(Math.abs(parseFloat(supplied.font)-expected)<.1,JSON.stringify({full,size,supplied,expected}));assert.equal(supplied.color,color==='yellow'?'rgb(255, 235, 59)':'rgb(255, 255, 255)');
    player.webContents.send('desktop:caption-buffer',{enabled:false,active:false});player.webContents.send('desktop:captions',{enabled:true,color,size,text:'Engine subtitle appearance',cueId:++comparisons,wordOffset:0});await wait(50);
+   await until(async()=>{try{const tree=await player.webContents.debugger.sendCommand('DOM.getDocument',{depth:-1,pierce:true}),host=find(tree.root,'rabbit-ears-desktop-caption-overlay'),text=host&&span(host);if(!text)return false;const result=await player.webContents.debugger.sendCommand('CSS.getComputedStyleForNode',{nodeId:text.nodeId}),css=Object.fromEntries(result.computedStyle.map(x=>[x.name,x.value]));return css.color===supplied.color&&Math.abs(parseFloat(css['font-size'])-parseFloat(supplied.font))<.1;}catch{return false;}});
    const tree=await player.webContents.debugger.sendCommand('DOM.getDocument',{depth:-1,pierce:true});const host=find(tree.root,'rabbit-ears-desktop-caption-overlay'),text=span(host);assert.ok(text);
    const computed=await player.webContents.debugger.sendCommand('CSS.getComputedStyleForNode',{nodeId:text.nodeId});const values=Object.fromEntries(computed.computedStyle.map(x=>[x.name,x.value]));assert.equal(values.color,supplied.color);assert.ok(Math.abs(parseFloat(values['font-size'])-parseFloat(supplied.font))<.1);
   }
