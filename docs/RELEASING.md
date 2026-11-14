@@ -9,3 +9,7 @@
 The feed is configured in package.json build.publish; electron-builder embeds app-update.yml into the installer. The installed app uses electron-updater 6.8.11 with beta allowed, downgrade disabled, automatic download disabled and installation on quit disabled. It checks at startup after 20 seconds and manually from Help. A downloaded update is only installed on an explicit restart action.
 
 This first Windows beta is unsigned. Add a Windows signing certificate in CI before the stable public rollout; do not commit signing credentials. Signing and notarization are additionally required before claiming in-app updates on macOS. Linux package-manager updates are outside this Windows delivery.
+
+## Mac and Linux release assets
+
+Run the Mac installers and Linux installers workflows on the release source. Publish Mac DMG/ZIP files only after both architecture jobs pass, and Linux packages only after the Debian, Fedora and Arch install/launch checks pass. Upload each platform’s SHA256SUMS file with its artifacts. Update the download table and platform guides to the exact published filenames, then check every public link. Keep Windows beta.yml unchanged when adding other-platform assets to the same beta. Mac/Linux beta updates currently use replacement installers/packages rather than automatic installation.

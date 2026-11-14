@@ -1,4 +1,4 @@
-# Audio (0.8 beta)
+# Audio settings
 
 Open **Audio → Audio settings**. Changes take effect as you adjust them and are saved in your app profile. **Audio effects** bypasses the listening effects without erasing their settings. The original channel volume and mute controls still work.
 

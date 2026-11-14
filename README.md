@@ -7,7 +7,7 @@ A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
 | Your computer | Download | Install instructions |
 | --- | --- | --- |
 | Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
-| Mac · Apple Silicon · macOS 14.2+ | Build and checks in progress | [Mac guide](docs/MAC.md) |
+| Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
 | Mac · Intel · macOS 14.2+ | Build and checks in progress | [Mac guide](docs/MAC.md) |
 | Debian/Ubuntu · Intel/AMD 64-bit | Build and checks in progress | [Debian guide](docs/LINUX.md#debian-and-ubuntu) |
 | Fedora · Intel/AMD 64-bit | Build and checks in progress | [Fedora guide](docs/LINUX.md#fedora) |
@@ -44,4 +44,4 @@ Future releases must publish the NSIS installer, its blockmap and beta.yml toget
 
 ## Development
 
-`npm ci`, then `npm start`. Build native caption helpers with `npm run build:captions`; build Windows installers with `npm run dist`. `npm test` checks caption precedence, nonblocking playback, controls, audio and update decisions. macOS/Linux engines are retained in source but this initial delivery is Windows x64; those packages are not validated Rabbit Ears releases.
+`npm ci`, then `npm start`. Build native caption helpers with `npm run build:captions`; build Windows installers with `npm run dist`. `npm test` checks caption precedence, nonblocking playback, controls, audio and update decisions. Build Mac DMG/ZIP packages with `npm run dist:mac` on the matching Mac architecture. Build Debian, Fedora and Arch packages with `npm run dist:linux` on Linux. The Mac/Linux workflows build the bundled engines and check the resulting apps/packages.

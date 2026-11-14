@@ -1,6 +1,6 @@
 # Mac installation
 
-Requires **macOS 14.2 or newer** and internet for streams. The Apple Silicon and Intel beta builds are currently being built and checked; their download links will appear on the [front page](../README.md) after the checks pass.
+Requires **macOS 14.2 or newer** and internet for streams. The [Apple Silicon DMG is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Mac-arm64.dmg). The Intel build is still being checked; its link will appear on the [front page](../README.md) after those checks pass.
 
 ## Choose the right Mac build
 
