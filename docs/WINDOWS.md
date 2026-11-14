@@ -2,7 +2,7 @@
 
 Windows 10 or 11 on an Intel/AMD 64-bit computer.
 
-1. [Download the Windows installer](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Windows-x64-Setup.exe).
+1. [Download the Windows installer](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.4/Rabbit-Ears-stream-Desktop-0.1.0-beta.4-Windows-x64-Setup.exe).
 2. Open Setup.exe and follow the installer. It installs for your user without administrator access.
 3. Launch **Rabbit-Ears.stream Desktop** from Start or the desktop shortcut.
 

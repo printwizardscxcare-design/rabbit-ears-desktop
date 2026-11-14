@@ -2,20 +2,20 @@
 
 A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
 
-**[Windows Beta 2 is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.2)** with unified caption styling and the single-window compact player. Use Help → Check for app updates in the Windows app. Mac and Linux downloads include the same fixes; install the replacement package for your platform.
+**[Windows Beta 4 is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.4)** with theme-matched Audio controls, restored app menus and the themed TV bezel retained in Pop out. Use Help → Check for app updates on Windows, or download the Windows installer below. Mac/Linux Beta 4 packages are being verified; their table links remain Beta 2 until the new downloads are ready.
 
-## Download · 0.1.0 Beta 2
+## Download · 0.1.0 Beta 4
 
 | Your computer | Download | Install instructions |
 | --- | --- | --- |
-| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
+| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.4/Rabbit-Ears-stream-Desktop-0.1.0-beta.4-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
 | Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
 | Mac · Intel · macOS 14.2+ | **[Download Intel Mac (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Mac-x64.dmg)** | [Mac guide](docs/MAC.md) |
 | Debian/Ubuntu · Intel/AMD 64-bit | **[Download Debian (.deb)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Debian-amd64.deb)** | [Debian guide](docs/LINUX.md#debian-and-ubuntu) |
 | Fedora · Intel/AMD 64-bit | **[Download Fedora (.rpm)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Fedora-x86_64.rpm)** | [Fedora guide](docs/LINUX.md#fedora) |
 | Arch Linux · Intel/AMD 64-bit | **[Download Arch (.pkg.tar.xz)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.2/Rabbit-Ears-stream-Desktop-0.1.0-beta.2-Arch-x64.pkg.tar.xz)** | [Arch guide](docs/LINUX.md#arch-linux) |
 
-[All release files and checksums](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.2) · [Caption help](docs/CAPTIONS.md) · [Audio settings](docs/AUDIO.md) · [Report a problem](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/issues)
+[All release files and checksums](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.4) · [Caption help](docs/CAPTIONS.md) · [Audio settings](docs/AUDIO.md) · [Report a problem](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/issues)
 
 Install the package for your computer, rather than GitHub’s Source code ZIP. The Windows beta is unsigned; macOS builds are ad-hoc signed and not Apple-notarized. Internet is required for streams. Speech models are included in the installers.
 
@@ -34,13 +34,13 @@ The app Captions menu controls On/Off, the fallback engine, size, color, timing 
 
 ## Audio and controls
 
-The Audio menu retains the desktop engine: tape-hiss reduction, normalization, compression, makeup gain, a 10-band graphical EQ, factory and custom presets. Preferences save locally. Effects are optional; original sound is the initial preset. Audio processing in this app does not re-enable the retired website audio engine.
+The Audio menu retains the desktop engine: tape-hiss reduction, normalization, compression, makeup gain, a 10-band graphical EQ, factory and custom presets. The Audio window follows the current skin on opening and while you change themes, including Windows. Preferences save locally. Effects are optional; original sound is the initial preset. Audio processing in this app does not re-enable the retired website audio engine.
 
 Keyboard/controller bindings, video fullscreen, zoom and Always on top are available in the desktop menus. The underlying site's controls remain available.
 
 ## Compact player
 
-Click **Pop out** to turn this same window into a compact, borderless screen and transport. It opens no second player/window and keeps the same video, position and pause state. Drag the video or empty panel space to move it, and resize the edges. **Return** restores the full app and its previous bounds/maximized state. **Ctrl+Shift+P** (Command+Shift+P on Mac) also toggles it. Compact mode stays above other windows where the OS supports it; Wayland uses the desktop’s window-manager controls.
+Click **Pop out** to turn this same window into a compact, borderless TV with its themed bezel and transport. It opens no second player/window and keeps the same video, position and pause state. Drag the TV bezel, video or empty panel space to move it, and resize the edges. **Return** restores the full app, all app menus and its previous bounds/maximized state. Rabbit Ears, Navigate, View, Captions, Audio, Settings and Help remain visible in the normal app; only Pop out and video fullscreen hide this menu row. **Ctrl+Shift+P** (Command+Shift+P on Mac) also toggles it. Compact mode stays above other windows where the OS supports it; Wayland uses the desktop’s window-manager controls.
 
 ## In-app updates
 

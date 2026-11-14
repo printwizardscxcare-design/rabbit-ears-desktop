@@ -2,6 +2,8 @@
 
 Open **Audio → Audio settings**. Changes take effect as you adjust them and are saved in your app profile. **Audio effects** bypasses the listening effects without erasing their settings. The original channel volume and mute controls still work.
 
+The Audio window matches the currently selected viewing skin on Windows, Mac and Linux. It follows theme changes while open and reopens in the current theme. Changing its appearance does not modify audio effects or saved presets.
+
 ## Listening controls
 
 - **Denoiser:** 0 is Off; 1–100 increases adaptive spectral noise reduction. Start around 15–30 for steady VHS hiss. Strong settings can soften speech, music, and ambience. This is not a repair tool for dropouts, clipping, or tape-speed problems. Noise estimates reset when the channel file changes. It runs locally and adds about 21–23 milliseconds of processing delay at common sample rates when enabled.
