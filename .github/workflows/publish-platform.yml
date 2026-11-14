@@ -39,13 +39,20 @@ jobs:
           [[ "$BUILD_RUN_ID" =~ ^[0-9]+$ ]]
           [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]
           case "$ARTIFACT_NAME" in
-            Rabbit-Ears-stream-Desktop-Mac-arm64|Rabbit-Ears-stream-Desktop-Mac-x64) expected='.github/workflows/mac.yml' ;;
-            Rabbit-Ears-stream-Desktop-Linux-x64) expected='.github/workflows/linux.yml' ;;
+            Rabbit-Ears-stream-Desktop-Mac-arm64) expected='.github/workflows/mac.yml'; expected_job='build (macos-15, arm64)' ;;
+            Rabbit-Ears-stream-Desktop-Mac-x64) expected='.github/workflows/mac.yml'; expected_job='build (macos-15-intel, x64)' ;;
+            Rabbit-Ears-stream-Desktop-Linux-x64) expected='.github/workflows/linux.yml'; expected_job='' ;;
             *) exit 1 ;;
           esac
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BUILD_RUN_ID" > build.json
-          test "$(jq -r .conclusion build.json)" = success
           test "$(jq -r .path build.json)" = "$expected"
+          if [ -n "$expected_job" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BUILD_RUN_ID/jobs?per_page=100" > jobs.json
+            jq -e --arg name "$expected_job" '.jobs[] | select(.name==$name and .conclusion=="success")' jobs.json > /dev/null
+          else
+            # Linux must pass all three clean-package installation jobs as well.
+            test "$(jq -r .conclusion build.json)" = success
+          fi
           build_sha=$(jq -r .head_sha build.json)
           test "$(git show "$build_sha:package.json" | jq -r .version)" = "${RELEASE_TAG#v}"
           test "$(git show "$RELEASE_TAG:package.json" | jq -r .version)" = "${RELEASE_TAG#v}"
