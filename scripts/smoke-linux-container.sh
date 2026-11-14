@@ -18,15 +18,15 @@ useradd -m tester
 mkdir -p /tmp/runtime-tester
 chown tester:tester /tmp/runtime-tester
 chmod 700 /tmp/runtime-tester
-su tester -s /bin/bash -c 'node /source/scripts/check-whisper.cjs "/opt/Spelunkr Desktop/resources/native/whisper/caption-reader" /artifacts/test.wav --recorded-only'
+su tester -s /bin/bash -c 'node /source/scripts/check-whisper.cjs "/opt/Rabbit-Ears.stream Desktop/resources/native/whisper/caption-reader" /artifacts/test.wav --recorded-only'
 # Fresh allocations must not influence the speech detector's recurrent state.
 for pattern in 85 165 255; do
-  su tester -s /bin/bash -c "MALLOC_PERTURB_=$pattern node /source/scripts/check-buffered-whisper.cjs \"/opt/Spelunkr Desktop/resources/native/whisper/caption-reader\" /artifacts/test.wav"
+  su tester -s /bin/bash -c "MALLOC_PERTURB_=$pattern node /source/scripts/check-buffered-whisper.cjs \"/opt/Rabbit-Ears.stream Desktop/resources/native/whisper/caption-reader\" /artifacts/test.wav"
 done
-su tester -s /bin/bash -c 'node /source/scripts/smoke-buffered-capture.cjs "/opt/Spelunkr Desktop/resources/native" /artifacts/test.wav'
-su tester -s /bin/bash -c 'node /source/scripts/check-audio-filter.cjs "/opt/Spelunkr Desktop/resources/native/whisper/ffmpeg" /artifacts/test.wav'
+su tester -s /bin/bash -c 'node /source/scripts/smoke-buffered-capture.cjs "/opt/Rabbit-Ears.stream Desktop/resources/native" /artifacts/test.wav'
+su tester -s /bin/bash -c 'node /source/scripts/check-audio-filter.cjs "/opt/Rabbit-Ears.stream Desktop/resources/native/whisper/ffmpeg" /artifacts/test.wav'
 # The containers run without a desktop login. Disable Chromium sandbox ONLY for
 # this isolated GUI smoke check; installed application launchers keep it enabled.
-su tester -s /bin/bash -c 'export XDG_RUNTIME_DIR=/tmp/runtime-tester; xvfb-run -a bash -c '\''"/opt/Spelunkr Desktop/spelunkr-desktop" --no-sandbox --ozone-platform=x11 > /tmp/spelunkr-startup.log 2>&1 & pid=$!; sleep 12; kill -0 "$pid"; kill "$pid"; wait "$pid" || true'\'''
-cat /tmp/spelunkr-startup.log
+su tester -s /bin/bash -c 'export XDG_RUNTIME_DIR=/tmp/runtime-tester; xvfb-run -a bash -c '\''"/opt/Rabbit-Ears.stream Desktop/rabbit-ears-stream" --no-sandbox --ozone-platform=x11 > /tmp/rabbit-ears-startup.log 2>&1 & pid=$!; sleep 12; kill -0 "$pid"; kill "$pid"; wait "$pid" || true'\'''
+cat /tmp/rabbit-ears-startup.log
 echo "PASS: installed desktop app stayed running under Xvfb"

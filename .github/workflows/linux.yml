@@ -1,0 +1,64 @@
+name: Linux installers
+run-name: ${{ inputs.artifact-run && format('Linux checks for build {0}', inputs.artifact-run) || 'Linux installers' }}
+on:
+  workflow_dispatch:
+    inputs:
+      artifact-run:
+        description: Existing installer run to diagnose without rebuilding (leave empty for a release build)
+        required: false
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build:
+    if: ${{ !inputs.artifact-run }}
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: sudo apt-get update -qq && sudo apt-get install -y rpm libarchive-tools cmake g++
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist:linux -- --publish never
+      - name: Download upstream recognition test fixture
+        run: curl --fail --location --retry 3 https://raw.githubusercontent.com/alphacep/vosk-api/v0.3.45/python/example/test.wav -o dist/test.wav
+      - name: Write checksums
+        run: cd dist && sha256sum *.deb *.rpm *.pkg.tar.* > SHA256SUMS-Linux.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Rabbit-Ears-stream-Desktop-Linux-x64
+          path: |
+            dist/*.deb
+            dist/*.rpm
+            dist/*.pkg.tar.*
+            dist/SHA256SUMS-Linux.txt
+            dist/test.wav
+  check:
+    needs: build
+    if: ${{ always() && !cancelled() && (needs.build.result == 'success' || inputs.artifact-run != '') }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distro: debian
+            image: debian:13
+          - distro: fedora
+            image: fedora:43
+          - distro: arch
+            image: archlinux:base
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: Rabbit-Ears-stream-Desktop-Linux-x64
+          path: artifacts
+          run-id: ${{ inputs.artifact-run || github.run_id }}
+          github-token: ${{ github.token }}
+      - name: Install package and check captions and startup
+        run: docker run --rm -v "$PWD:/source:ro" -v "$PWD/artifacts:/artifacts:ro" "${{ matrix.image }}" bash /source/scripts/smoke-linux-container.sh "${{ matrix.distro }}"
