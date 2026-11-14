@@ -9,3 +9,4 @@ Existing site tracks are preferred; loading tracks stop the fallback and broken 
 The initial release includes update feed metadata and controller tests. A genuine later-version NSIS update and settings migration must be tested when beta.2 exists. macOS/Linux Rabbit Ears installers have not been tested or released.
 
 The real sandboxed Electron app opened the live Rabbit Ears site, selected Pixel Deck, exposed no window.require, and initialized its caption policy without renderer/preload errors. Screenshots are in docs/screenshots.
+The public beta feed was checked with the real electron-updater/Electron HTTP client after publishing. It resolved 0.1.0-beta.1 as the current version, did not download anything and rejected downgrades. The public installer URL returned HTTP 200 with the expected file size, and GitHub's uploaded SHA-256 digest matched SHA256SUMS.txt. A real later-version installation still needs the beta.2 upgrade test described in RELEASING.md.
