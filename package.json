@@ -1,0 +1,200 @@
+{
+  "name": "rabbit-ears-stream-desktop",
+  "version": "0.1.0-beta.1",
+  "description": "Rabbit-Ears.stream Desktop with stream-first captions, local speech fallback and audio controls.",
+  "main": "src/main.cjs",
+  "author": {
+    "name": "Rabbit Ears",
+    "email": "rabbitearsemail@gmail.com"
+  },
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "prestart": "npm run build:preload",
+    "build:preload": "node scripts/build-preload.cjs",
+    "build:captions": "node scripts/build-captions.cjs",
+    "predist": "npm run build:captions && npm run build:preload",
+    "prepack": "npm run build:captions && npm run build:preload",
+    "test": "node --test test/*.test.cjs",
+    "dist": "electron-builder --win nsis --x64",
+    "pack": "electron-builder --win --x64 --dir",
+    "dist:linux": "npm run build:captions && npm run build:preload && electron-builder --linux deb rpm pacman --x64",
+    "dist:mac": "npm run build:captions && npm run build:preload && electron-builder --mac dmg zip"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0",
+    "ffmpeg-static": "5.3.0"
+  },
+  "build": {
+    "appId": "stream.rabbit-ears.desktop",
+    "productName": "Rabbit-Ears.stream Desktop",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/icon.png",
+      "LICENSE",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Rabbit-Ears-stream-Desktop-${version}-Windows-${arch}-Setup.${ext}",
+      "extraResources": [
+        {
+          "from": "native/bin/CaptionReader.exe",
+          "to": "native/CaptionReader.exe"
+        },
+        {
+          "from": "native/bin/whisper",
+          "to": "native/whisper"
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Rabbit-Ears.stream Desktop",
+      "uninstallDisplayName": "Rabbit-Ears.stream Desktop",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "license": "LICENSE"
+    },
+    "linux": {
+      "executableName": "rabbit-ears-stream",
+      "icon": "assets/icon.png",
+      "category": "AudioVideo",
+      "synopsis": "Rabbit-Ears.stream desktop TV and radio",
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "pacman",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Rabbit-Ears-stream-Desktop-${version}-Linux-${arch}.${ext}",
+      "extraResources": [
+        {
+          "from": "native/bin/whisper",
+          "to": "native/whisper"
+        }
+      ],
+      "syncDesktopName": true
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "libatspi2.0-0",
+        "libdrm2",
+        "libgbm1",
+        "libasound2",
+        "libsecret-1-0",
+        "xdg-utils",
+        "pulseaudio-utils"
+      ],
+      "artifactName": "Rabbit-Ears-stream-Desktop-${version}-Debian-${arch}.${ext}"
+    },
+    "rpm": {
+      "depends": [
+        "gtk3",
+        "nss",
+        "libXScrnSaver",
+        "libXtst",
+        "at-spi2-atk",
+        "libdrm",
+        "mesa-libgbm",
+        "alsa-lib",
+        "libsecret",
+        "xdg-utils",
+        "pulseaudio-utils"
+      ],
+      "artifactName": "Rabbit-Ears-stream-Desktop-${version}-Fedora-${arch}.${ext}"
+    },
+    "pacman": {
+      "depends": [
+        "gtk3",
+        "nss",
+        "libxss",
+        "libxtst",
+        "at-spi2-core",
+        "libdrm",
+        "mesa",
+        "alsa-lib",
+        "libsecret",
+        "xdg-utils",
+        "libpulse"
+      ],
+      "artifactName": "Rabbit-Ears-stream-Desktop-${version}-Arch-${arch}.pkg.tar.xz"
+    },
+    "afterPack": "scripts/after-pack.cjs",
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.entertainment",
+      "minimumSystemVersion": "14.2",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "notarize": false,
+      "artifactName": "Rabbit-Ears-stream-Desktop-${version}-Mac-${arch}.${ext}",
+      "extraResources": [
+        {
+          "from": "native/bin/whisper",
+          "to": "native/whisper"
+        }
+      ],
+      "extendInfo": {
+        "NSAudioCaptureUsageDescription": "Rabbit Ears uses speaker audio only for optional local captions. Audio is not sent to a speech service."
+      },
+      "icon": "native/bin/icon.icns"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "printwizardscxcare-design",
+        "repo": "rabbit-ears-desktop",
+        "releaseType": "prerelease",
+        "channel": "beta"
+      }
+    ],
+    "generateUpdatesFilesForAllChannels": true
+  },
+  "homepage": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop",
+  "desktopName": "rabbit-ears-stream.desktop",
+  "dependencies": {
+    "electron-updater": "6.8.11"
+  }
+}
