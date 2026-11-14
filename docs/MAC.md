@@ -1,6 +1,6 @@
 # Mac installation
 
-Requires **macOS 14.2 or newer** and internet for streams. The [Apple Silicon DMG is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Mac-arm64.dmg). The Intel build is still being checked; its link will appear on the [front page](../README.md) after those checks pass.
+Requires **macOS 14.2 or newer** and internet for streams. Both processor builds have passed their speech, audio, signing and startup checks.
 
 ## Choose the right Mac build
 
@@ -8,8 +8,8 @@ Open **Apple menu → About This Mac**:
 
 | Chip or processor | Choose |
 | --- | --- |
-| Apple M-series chip | Apple Silicon / arm64 DMG |
-| Intel processor | Intel / x64 DMG |
+| Apple M-series chip | [Download Apple Silicon / arm64 DMG](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Mac-arm64.dmg) |
+| Intel processor | [Download Intel / x64 DMG](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.1/Rabbit-Ears-stream-Desktop-0.1.0-beta.1-Mac-x64.dmg) |
 
 ## Install and open
 
