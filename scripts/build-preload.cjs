@@ -11,7 +11,8 @@ const buffered = fs.readFileSync(path.join(root, 'src/caption-buffer-renderer.cj
 // A self-contained preload is required by Electron's renderer sandbox. This embeds
 // our local pure layout module; it never bundles or evaluates code from the site.
 const stream = fs.readFileSync(path.join(root,'src/stream-captions.cjs'),'utf8');
-const bundle = `const {installStreamCaptions} = (()=>{const module={exports:{}};\n${stream}\nreturn module.exports;})();\nconst { CaptionPages } = (() => {\nconst module = { exports: {} };\n${pages}\nreturn module.exports;\n})();\nconst ControlsModel = (() => {\nconst module = { exports: {} };\n${controls}\nreturn module.exports;\n})();\nconst installControls = (() => {\nconst module = { exports: {} };\n${runtime}\nreturn module.exports;\n})();\n${preload}`;
+const chrome=fs.readFileSync(path.join(root,'src/window-chrome.cjs'),'utf8');
+const bundle = `const installWindowChrome = (()=>{const module={exports:{}};\n${chrome}\nreturn module.exports;})();\nconst {installStreamCaptions} = (()=>{const module={exports:{}};\n${stream}\nreturn module.exports;})();\nconst { CaptionPages } = (() => {\nconst module = { exports: {} };\n${pages}\nreturn module.exports;\n})();\nconst ControlsModel = (() => {\nconst module = { exports: {} };\n${controls}\nreturn module.exports;\n})();\nconst installControls = (() => {\nconst module = { exports: {} };\n${runtime}\nreturn module.exports;\n})();\n${preload}`;
 const buffering = `const {CaptionCache} = (() => {const module = {exports:{}};\n${cache}\nreturn module.exports;})();\nconst installCaptionBuffer = (() => {const module = {exports:{}};\n${buffered}\nreturn module.exports;})();\n`;
 const audio = [['AudioModel','audio-model.js'],['createAudioGraph','audio-graph.cjs'],['installAudio','audio-runtime.cjs']].map(([name,file]) =>
   `const ${name} = (() => {const module = {exports:{}};\n${fs.readFileSync(path.join(root,'src',file),'utf8')}\nreturn module.exports;})();\n`).join('');

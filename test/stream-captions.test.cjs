@@ -13,8 +13,8 @@ test('availability settles, updates source changes immediately, and enables stre
  const instance=installStreamCaptions({ipcRenderer:{on:(n,f)=>events.set(n,f),send:(...x)=>sent.push(x)},document:{readyState:'complete',querySelector:s=>s==='#vid'?v:{click:()=>choices.push(s)}},window:{setInterval:()=>1,clearInterval(){},addEventListener(){}},now:()=>clock});
  assert.equal(sent.at(-1)[1].status,'pending');clock=1600;instance.tick();assert.equal(sent.at(-1)[1].status,'none');
  v=video('provided',[{readyState:2}]);v.currentSrc+='?new';instance.tick();assert.equal(sent.at(-1)[1].status,'provided');
- events.get('desktop:caption-policy')({}, {enabled:false});assert.match(choices.at(-1),/none/);
- events.get('desktop:caption-policy')({}, {enabled:true,color:'yellow'});assert.match(choices.at(-1),/yellow/);
+ events.get('desktop:caption-policy')({}, {enabled:false});assert.equal(choices.length,0);
+ events.get('desktop:caption-policy')({}, {enabled:true,color:'yellow'});assert.equal(choices.length,0);assert.ok(sent.some(([event])=>event==='captions:render-policy'));
 });
 
 test('text tracks in the browser are recognized even without a site marker',()=>{const v=video('none');v.textTracks=[{kind:'captions',cues:[{}]}];assert.equal(captionAvailability(v),'provided');});

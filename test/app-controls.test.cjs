@@ -218,3 +218,5 @@ test('stream subtitles and burned-in captions suppress both engines and preserve
  item('captions-off').click();h.availability('none');await flush();assert.equal(h.bridge.active,false);assert.equal(h.preferences.at(-1).enabled,false);
  h.window.emit('closed');await flush();
 });
+
+test('desktop caption appearance reaches supplied tracks and remains saved while recognition is off',async()=>{const h=await appHarness('win32');h.availability('provided');await flush();h.menu.getMenuItemById('caption-size-1.5').click();h.menu.getMenuItemById('caption-color-yellow').click();const policy=h.messages.filter(m=>m.channel==='desktop:caption-policy').at(-1).value;assert.equal(policy.size,1.5);assert.equal(policy.color,'yellow');assert.equal(h.bufferedEnabled(),false);assert.equal(h.preferences.at(-1).size,1.5);assert.equal(h.preferences.at(-1).color,'yellow');h.availability('none');await flush();assert.equal(h.bufferedEnabled(),true);assert.equal(h.preferences.at(-1).size,1.5);assert.equal(h.preferences.at(-1).color,'yellow');h.window.emit('closed');await flush();});

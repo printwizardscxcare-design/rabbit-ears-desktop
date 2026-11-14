@@ -15,6 +15,7 @@ const {createCaptionBufferManager} = require('./caption-buffer-manager.cjs');
 const {createAudioManager} = require('./audio-manager.cjs');
 const {createUpdater}=require('./updater.cjs');
 const {autoUpdater}=require('electron-updater');
+const {createWindowMode}=require('./window-mode.cjs');
 const {configureAudioCors}=require('./audio-cors.cjs');
 
 app.setName('Rabbit-Ears.stream Desktop');
@@ -53,6 +54,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       backgroundColor: '#101827',
       icon: path.join(__dirname, '../assets/icon.png'),
       show: false,
+      frame: false,
       webPreferences: {
         partition: 'persist:rabbit-ears',
         preload: path.join(__dirname, 'preload.generated.cjs'),
@@ -70,11 +72,12 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     // Keep the independent app identity visible on every site page.
     win.on('page-title-updated', event => event.preventDefault());
     win.on('close', () => {
-      const boundsToSave = { ...win.getNormalBounds(), maximized: win.isMaximized() };
+      const boundsToSave = windowMode.savedState();
       try { fs.writeFileSync(stateFile(), JSON.stringify(boundsToSave)); } catch {}
     });
 
     const contents = win.webContents;
+    const windowMode=createWindowMode({win,ipcMain,screen,errorPage,allowOnTop:!(process.platform==='linux'&&process.env.WAYLAND_DISPLAY)});
     let videoFullscreen = false;
     const updateFullscreenMenu = () => {
       const item = Menu.getApplicationMenu()?.getMenuItemById('video-fullscreen');
@@ -121,6 +124,12 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     let captionText = '';
     let captionMetadata = { cueId: 0, wordOffset: 0, clearReason: 'reset' };
     let captionStatus = 'Off';
+    const renderStreamPolicy = () => {
+      if(!isSite(contents.getURL()))return;
+      const preferences={re_caption_style:captionsOn?captionColor:'none'};
+      // applyPreferences changes only this page's in-memory renderer, not its store or Discord profile.
+      contents.executeJavaScript('if(location.origin==="https://rabbit-ears.stream"&&typeof captionUI!=="undefined"){captionUI.applyPreferences('+JSON.stringify(preferences)+');captionUI.closeMenu?.(false);}').catch(()=>{});
+    };
     const sendCaptions = () => {
       if (win && !win.isDestroyed()) contents.send('desktop:captions', {
         enabled: overlayEnabled && isSite(contents.getURL()), color: captionColor, size: captionSize,
@@ -187,7 +196,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       const rewindOnEnable = false;
       captionsOn = enabled;
       overlayEnabled = enabled && streamCaptionStatus === 'none';
-      contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor});
+      contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor,size:captionSize});renderStreamPolicy();
       enabled = overlayEnabled;
       saveCaptionPreferences();
       if (!enabled) subtitleCoolingDown = false;
@@ -222,13 +231,14 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     const setCaptionColor = color => {
       captionColor = color;
       saveCaptionPreferences();
-      contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor});
+      contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor,size:captionSize});
       updateCaptionMenu();
       sendCaptions();
     };
     const setCaptionSize = size => {
       captionSize = size;
       saveCaptionPreferences();
+      contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor,size:captionSize});
       updateCaptionMenu();
       sendCaptions();
     };
@@ -259,15 +269,23 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       if(streamCaptionStatus===value.status)return;
       streamCaptionStatus=value.status;setOverlayEnabled(captionsOn);
     };
+    const appearance = (event,value) => {
+      if(event.sender!==contents || event.senderFrame!==contents.mainFrame || !isSite(event.senderFrame?.url))return;
+      if(value?.color==='white'||value?.color==='yellow')setCaptionColor(value.color);
+      if(typeof value?.enabled==='boolean')setOverlayEnabled(value.enabled);
+    };
+    const renderPolicy=event=>{if(event.sender===contents&&event.senderFrame===contents.mainFrame&&isSite(event.senderFrame?.url))renderStreamPolicy();};
+    ipcMain.on('captions:render-policy',renderPolicy);
+    ipcMain.on('captions:appearance',appearance);
     ipcMain.on('captions:availability',availability);
     contents.on('did-start-navigation',(_event,_url,inPlace,isMainFrame)=>{if(isMainFrame&&!inPlace){streamCaptionStatus='pending';setOverlayEnabled(captionsOn);}});
-    contents.on('did-finish-load',()=>{contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor});sendCaptions();});
+    contents.on('did-finish-load',()=>{contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor,size:captionSize});sendCaptions();});
     contents.on('did-navigate-in-page', () => {
       if (overlayEnabled && captionEngine === 'whisper') return; // The renderer resets when the actual video source changes.
       else { cues.clear(); sendCaptions(); }
     });
     win.on('closed', () => {
-      ipcMain.removeListener('captions:availability',availability);overlayEnabled=false; revision++; cues.clear({ keepSnapshot: false }); timing.reset(); captions.stop(); win=null;
+      ipcMain.removeListener('captions:availability',availability);ipcMain.removeListener('captions:appearance',appearance);ipcMain.removeListener('captions:render-policy',renderPolicy);overlayEnabled=false; revision++; cues.clear({ keepSnapshot: false }); timing.reset(); captions.stop(); win=null;
       if (process.platform === 'darwin') Menu.setApplicationMenu(Menu.buildFromTemplate([
         {role:'appMenu'}, {label:'File', submenu:[{label:'New Window', accelerator:'Command+N', click:createWindow}]}
       ]));
@@ -374,6 +392,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
         { label: '&Reload / Retry connection', click: reload }
       ] },
       { label: '&View', submenu: [
+        {id:'compact-player',label:'Compact player / Return to app',accelerator:'CmdOrCtrl+Shift+P',click:windowMode.toggle},
         { id: 'video-fullscreen', label: 'Enter video &fullscreen', click: nativeControls.fullscreen },
         { id: 'always-on-top', label: '&Always on top', enabled: !(process.platform === 'linux' && Boolean(process.env.WAYLAND_DISPLAY)), type: 'checkbox', click: item => win.setAlwaysOnTop(item.checked) },
         { type: 'separator' },

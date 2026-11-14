@@ -30,6 +30,8 @@ jobs:
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           MACOSX_DEPLOYMENT_TARGET: '14.2'
+      - name: Check caption appearance and compact window
+        run: node_modules/.bin/electron scripts/check-caption-appearance.cjs
       - name: Check Mac app and bundled speech models
         run: |
           APP=$(find dist -maxdepth 2 -name '*.app' -type d | head -n 1)

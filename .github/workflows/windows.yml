@@ -26,6 +26,14 @@ jobs:
       - run: npm test
       - run: npm run build:captions
       - run: npm run build:preload
+      - name: Check caption appearance and compact window
+        shell: pwsh
+        run: |
+          $exe = node -p "require('electron')"
+          $check = Start-Process -FilePath $exe -ArgumentList scripts/check-caption-appearance.cjs -Wait -PassThru -WindowStyle Hidden -RedirectStandardOutput appearance.out.log -RedirectStandardError appearance.err.log
+          Get-Content appearance.out.log
+          Get-Content appearance.err.log
+          if ($check.ExitCode -ne 0) { exit $check.ExitCode }
       - run: npx electron-builder --win nsis --x64 --publish never
       - run: node scripts/check-release.cjs
       - name: Checksums

@@ -4,7 +4,7 @@ Captions start on. Rabbit Ears first uses the subtitle track supplied with the s
 
 ## Shows with existing subtitles
 
-Use the player’s **CC** button for the site’s white/yellow text and backing choices. A subtitle track may take a moment to load; loading is not treated as missing. If a track fails, the desktop app can fall back to local recognition. Text embedded in the picture is part of the video and cannot be switched off.
+Use the desktop Captions menu for size and color on supplied tracks as well as engine captions. The player’s **CC** color buttons update the same desktop preference. These appearance changes stay local to the app and do not change the website profile. A subtitle track may take a moment to load; loading is not treated as missing. If a track fails, the desktop app can fall back to local recognition. Text embedded in the picture is part of the video and cannot be switched off.
 
 ## Shows without subtitles
 
@@ -14,7 +14,7 @@ Use the player’s **CC** button for the site’s white/yellow text and backing 
 
 ## Controls
 
-Use **Captions → On / Off** in the desktop menu. Toggle with **Ctrl+Shift+L** on Windows/Linux or **Command+Shift+L** on Mac. The menu also provides the local engine, recognition speed, text size, white/yellow text and subtitle delay. Use the site CC menu to style a supplied stream track.
+Use **Captions → On / Off** in the desktop menu. Toggle with **Ctrl+Shift+L** on Windows/Linux or **Command+Shift+L** on Mac. The menu also provides the local engine, recognition speed, text size, white/yellow text and subtitle delay. Size and color are shared across stream tracks, Whisper and Windows captions, including fullscreen and compact mode.
 
 The local Whisper models recognize English and do not translate foreign speech. Existing English translations from the site are still used normally. Recognition can make mistakes, especially on noisy recordings or music. Locally generated captions are not uploaded to the website.
 

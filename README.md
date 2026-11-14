@@ -2,6 +2,8 @@
 
 A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
 
+Beta 2 is being built with unified caption styling and the single-window compact player. Downloads below remain Beta 1 until each replacement is verified.
+
 ## Download · 0.1.0 Beta 1
 
 | Your computer | Download | Install instructions |
@@ -28,13 +30,17 @@ When no usable subtitles exist, the selected local engine fills in:
 - **Whisper (default):** the engine and tiny/base English models are bundled; no account, model download, microphone setup or separate install. Recognition reads the public Archive file and follows media timestamps. Playback is never paused or rewound to prepare captions. Slower computers may show captions late.
 - **Windows Live Captions:** optional on Windows 11 22H2 or newer. Windows may need its own speech-language files on first use. This option reads Windows' live-caption output, so other audible apps may be included.
 
-Use the site's CC options for stream subtitles. The app Captions menu controls On/Off, the fallback engine, size, color, timing and recognition speed. Burned-in text cannot be switched off. Whisper's bundled models recognize English; they do not translate foreign speech. Captions remain local and are not uploaded to the site.
+The app Captions menu controls On/Off, the fallback engine, size, color, timing and recognition speed. Size and color apply equally to supplied subtitle tracks and local engine captions. The site player’s CC color choices also update the app preference, without writing to the website’s saved profile. Burned-in text cannot be switched off. Whisper's bundled models recognize English; they do not translate foreign speech. Captions remain local and are not uploaded to the site.
 
 ## Audio and controls
 
 The Audio menu retains the desktop engine: tape-hiss reduction, normalization, compression, makeup gain, a 10-band graphical EQ, factory and custom presets. Preferences save locally. Effects are optional; original sound is the initial preset. Audio processing in this app does not re-enable the retired website audio engine.
 
 Keyboard/controller bindings, video fullscreen, zoom and Always on top are available in the desktop menus. The underlying site's controls remain available.
+
+## Compact player
+
+Click **Pop out** to turn this same window into a compact, borderless screen and transport. It opens no second player/window and keeps the same video, position and pause state. Drag the video or empty panel space to move it, and resize the edges. **Return** restores the full app and its previous bounds/maximized state. **Ctrl+Shift+P** (Command+Shift+P on Mac) also toggles it. Compact mode stays above other windows where the OS supports it; Wayland uses the desktop’s window-manager controls.
 
 ## In-app updates
 
