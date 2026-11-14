@@ -450,6 +450,8 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       { label: '&Settings', submenu: [{id: 'controls-settings', label: '&Controls…', accelerator: 'CmdOrCtrl+,', click: controls.open},
         {label:'&Audio…',click:audio.open}] },
       { label: '&Help', submenu: [
+        { id: 'team-support', label: 'Buy the team a &beer', click: () => openExternal('https://rabbit-ears.stream/support/') },
+        { type: 'separator' },
         { label: 'Linux setup and troubleshooting', visible: process.platform === 'linux', click: () => openExternal('https://github.com/printwizardscxcare-design/rabbit-ears-desktop/blob/main/docs/LINUX.md') },
         { label: 'About Linux captions', visible: process.platform === 'linux', click: () => dialog.showMessageBox(win, { title: 'Linux captions', message: 'Local English captions prepared ahead of playback.', detail: 'Press Ctrl+Shift+L to toggle captions. Whisper reads the channel file directly and prepares timestamped subtitles at least 15 seconds ahead of the picture. Playback pauses while the cache fills. Captions work with the player muted and do not use other apps or a microphone. No audio or transcript is saved. Color, size, subtitle delay, two-line blocks, and fullscreen sizing use the same controls on every platform.' }) },
         { label: 'Mac setup and troubleshooting', visible: process.platform === 'darwin', click: () => openExternal('https://github.com/printwizardscxcare-design/rabbit-ears-desktop/blob/main/docs/MAC.md') },
