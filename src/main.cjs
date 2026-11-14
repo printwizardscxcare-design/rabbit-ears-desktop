@@ -50,7 +50,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       ...bounds,
       minWidth: 640,
       minHeight: 480,
-      title: /-beta\./.test(app.getVersion?.() || '') ? `Rabbit-Ears.stream Desktop — Beta ${app.getVersion()}` : 'Rabbit-Ears.stream Desktop',
+      title: /-beta\./.test(app.getVersion?.() || '') ? `rabbit-ears.stream Desktop — Beta ${app.getVersion()}` : 'rabbit-ears.stream Desktop',
       backgroundColor: '#101827',
       icon: path.join(__dirname, '../assets/icon.png'),
       show: false,
