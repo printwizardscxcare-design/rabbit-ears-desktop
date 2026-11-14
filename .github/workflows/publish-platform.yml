@@ -75,7 +75,7 @@ jobs:
           esac
           cd incoming
           # Build manifests contain simple release basenames, never filesystem paths.
-          awk 'NF != 2 || $1 !~ /^[a-f0-9]+$/ || length($1) != 64 || $2 !~ /^[-A-Za-z0-9.]+$/ {exit 1}' "$manifest"
+          awk 'NF != 2 || $1 !~ /^[a-f0-9]+$/ || length($1) != 64 || $2 !~ /^[-A-Za-z0-9._]+$/ {exit 1}' "$manifest"
           sha256sum -c "$manifest"
           mapfile -t files < <(awk '{print $2}' "$manifest")
           files+=("$manifest")
