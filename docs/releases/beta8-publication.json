@@ -1,0 +1,31 @@
+{
+  "release": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.8",
+  "tag": "v0.1.0-beta.8",
+  "assetCount": 14,
+  "verifiedInstallerDigests": [
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Windows-x64-Setup.exe",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-arm64.dmg",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-arm64.zip",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-x64.dmg",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-x64.zip",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Debian-amd64.deb",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Fedora-x86_64.rpm",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Arch-x64.pkg.tar.xz"
+  ],
+  "allAssetDigests": {
+    "beta.yml": "sha256:4edef558253f5dcdde71e723ee3cdfe48a43c568a7186deda4fc2b575e229ac0",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Arch-x64.pkg.tar.xz": "sha256:f1a548c06e858aa0d3f68e3e2170ecf6ddbd77b2aef78f19ead76fe563a8ea38",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Debian-amd64.deb": "sha256:3825441bbfdf6aefecb4f352629233bb28828c414cfb7b84bb6f4621eea154fd",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Fedora-x86_64.rpm": "sha256:2508873786f9c34b465b6fd1e4ab65ed2398b81505509bfb2a995b67e1afbc26",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-arm64.dmg": "sha256:9749f9994e3e5aba1d98b19ee1c596ae235383f19f52571386fe5a41106b1e69",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-arm64.zip": "sha256:82341aaf88032144fd0abd0ecc7c60d7e267bff2b0c274f369a3b668e027aca5",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-x64.dmg": "sha256:c7efebb9c4c7d45227d7620c31c551317635b3bf22767828c2291dd79c2665be",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-x64.zip": "sha256:a7a9e68521951d4cefb5aa1cefd43ee7eab087779f41ee241a591ec75774c945",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Windows-x64-Setup.exe": "sha256:cb901f4f721ba92ecc067424085bc508860743cc765ea0709b74f4f28b064746",
+    "Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Windows-x64-Setup.exe.blockmap": "sha256:d1462f1f75edddcc0ae4cd2266f29ba9330101129ff8869157177bac64577732",
+    "SHA256SUMS-Linux.txt": "sha256:062e473de2706f6048f458c56d14ff632a86fded59eedffde1e2f49ed2e396d5",
+    "SHA256SUMS-Mac-arm64.txt": "sha256:16ba31e2319d8397b7e19ba383822508db0efbec3d6ef7ea2e3080f0be571c36",
+    "SHA256SUMS-Mac-x64.txt": "sha256:82ff5f3ce5f565eb26f34a5236fc6d1700ba667771db1611033710514aac23bb",
+    "SHA256SUMS.txt": "sha256:0c63d101b1147bb50ae62e4938599f26c252213c1aafb60f0294c07f55c0ba47"
+  }
+}
