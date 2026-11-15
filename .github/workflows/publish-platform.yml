@@ -77,6 +77,11 @@ jobs:
             *Linux-x64) manifest=SHA256SUMS-Linux.txt ;;
           esac
           cd incoming
+          # Windows PowerShell writes CRLF checksum lists; normalize only this text manifest.
+          if [[ "$ARTIFACT_NAME" == *Windows-x64 ]]; then
+            tr -d '\r' < "$manifest" > checksums-normalized.txt
+            mv checksums-normalized.txt "$manifest"
+          fi
           # Build manifests contain simple release basenames, never filesystem paths.
           awk 'NF != 2 || $1 !~ /^[a-f0-9]+$/ || length($1) != 64 || $2 !~ /^[-A-Za-z0-9._]+$/ {exit 1}' "$manifest"
           sha256sum -c "$manifest"
