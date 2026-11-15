@@ -9,6 +9,7 @@ on:
         type: choice
         description: Checked platform artifact
         options:
+          - Rabbit-Ears-stream-Desktop-Windows-x64
           - Rabbit-Ears-stream-Desktop-Mac-arm64
           - Rabbit-Ears-stream-Desktop-Mac-x64
           - Rabbit-Ears-stream-Desktop-Linux-x64
@@ -39,6 +40,7 @@ jobs:
           [[ "$BUILD_RUN_ID" =~ ^[0-9]+$ ]]
           [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]
           case "$ARTIFACT_NAME" in
+            Rabbit-Ears-stream-Desktop-Windows-x64) expected='.github/workflows/windows.yml'; expected_job='' ;;
             Rabbit-Ears-stream-Desktop-Mac-arm64) expected='.github/workflows/mac.yml'; expected_job='build (macos-15, arm64)' ;;
             Rabbit-Ears-stream-Desktop-Mac-x64) expected='.github/workflows/mac.yml'; expected_job='build (macos-15-intel, x64)' ;;
             Rabbit-Ears-stream-Desktop-Linux-x64) expected='.github/workflows/linux.yml'; expected_job='' ;;
@@ -56,7 +58,7 @@ jobs:
           build_sha=$(jq -r .head_sha build.json)
           test "$(git show "$build_sha:package.json" | jq -r .version)" = "${RELEASE_TAG#v}"
           test "$(git show "$RELEASE_TAG:package.json" | jq -r .version)" = "${RELEASE_TAG#v}"
-          git diff --exit-code "$RELEASE_TAG" "$build_sha" -- src assets native scripts package.json package-lock.json .github/workflows/mac.yml .github/workflows/linux.yml ':(exclude)scripts/check-caption-appearance.cjs'
+          git diff --exit-code "$RELEASE_TAG" "$build_sha" -- src assets native scripts package.json package-lock.json .github/workflows/mac.yml .github/workflows/linux.yml .github/workflows/windows.yml ':(exclude)scripts/check-caption-appearance.cjs'
           gh release view "$RELEASE_TAG" --json isPrerelease --jq .isPrerelease | grep -qx true
       - uses: actions/download-artifact@v4
         with:
@@ -69,6 +71,7 @@ jobs:
         run: |
           set -euo pipefail
           case "$ARTIFACT_NAME" in
+            *Windows-x64) manifest=SHA256SUMS.txt ;;
             *Mac-arm64) manifest=SHA256SUMS-Mac-arm64.txt ;;
             *Mac-x64) manifest=SHA256SUMS-Mac-x64.txt ;;
             *Linux-x64) manifest=SHA256SUMS-Linux.txt ;;
@@ -79,8 +82,27 @@ jobs:
           sha256sum -c "$manifest"
           mapfile -t files < <(awk '{print $2}' "$manifest")
           files+=("$manifest")
+          if [[ "$ARTIFACT_NAME" == *Windows-x64 ]]; then
+            # Also verify the update feed and blockmap before publishing the checked Windows build.
+            python3 - <<'PY'
+          import base64, hashlib, os, pathlib, re
+          feed = pathlib.Path('beta.yml').read_text(encoding='utf-8-sig')
+          version = os.environ['RELEASE_TAG'][1:]
+          assert re.search(r'^version: '+re.escape(version)+r'\s*$', feed, re.M)
+          installer = next(pathlib.Path('.').glob('*-Setup.exe'))
+          assert installer.name in feed
+          expected = re.search(r'^sha512: (\S+)', feed, re.M).group(1)
+          digest = hashlib.sha512()
+          with installer.open('rb') as handle:
+              for chunk in iter(lambda: handle.read(1024*1024), b''):
+                  digest.update(chunk)
+          assert base64.b64encode(digest.digest()).decode() == expected
+          assert pathlib.Path(str(installer)+'.blockmap').stat().st_size > 0
+          PY
+            files+=("${files[0]}.blockmap" beta.yml)
+          fi
           for file in "${files[@]}"; do
-            if [ "$file" != "$manifest" ]; then
+            if [ "$file" != "$manifest" ] && [ "$file" != beta.yml ]; then
               [[ "$file" == Rabbit-Ears-stream-Desktop-"${RELEASE_TAG#v}"-* ]]
             fi
             local_hash="sha256:$(sha256sum "$file" | cut -d ' ' -f1)"
