@@ -106,19 +106,22 @@ jobs:
           PY
             files+=("${files[0]}.blockmap" beta.yml)
           fi
+          # Drafts are intentionally absent from releases/tags; resolve the authenticated release ID.
+          release_id=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate | jq -r --arg tag "$RELEASE_TAG" '.[] | select(.tag_name==$tag) | .id')
+          [[ "$release_id" =~ ^[0-9]+$ ]]
           for file in "${files[@]}"; do
             if [ "$file" != "$manifest" ] && [ "$file" != beta.yml ]; then
               [[ "$file" == Rabbit-Ears-stream-Desktop-"${RELEASE_TAG#v}"-* ]]
             fi
             local_hash="sha256:$(sha256sum "$file" | cut -d ' ' -f1)"
-            gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" > /tmp/release.json
+            gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" > /tmp/release.json
             existing=$(jq -r --arg name "$file" '.assets[] | select(.name==$name) | .digest' /tmp/release.json)
             if [ -z "$existing" ]; then
               gh release upload "$RELEASE_TAG" "$file"
             else
               test "$existing" = "$local_hash"
             fi
-            remote_hash=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" | jq -r --arg name "$file" '.assets[] | select(.name==$name) | .digest')
+            remote_hash=$(gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" | jq -r --arg name "$file" '.assets[] | select(.name==$name) | .digest')
             test "$remote_hash" = "$local_hash"
             printf '%s  %s\n' "$local_hash" "$file" >> "$GITHUB_STEP_SUMMARY"
           done
