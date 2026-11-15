@@ -1,6 +1,10 @@
 'use strict';
 (async function () {
   const model = window.ControlsModel, api = window.controlsSettings;
+  const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
+  const applyTheme=skin=>{document.body.dataset.skin=skins.has(skin)?skin:'pixel';};
+  let receivedTheme=false;
+  api.onTheme(skin=>{receivedTheme=true;applyTheme(skin);});
   const list = document.getElementById('list'), saveButton = document.getElementById('save');
   const status = document.getElementById('status'), capture = document.getElementById('capture');
   let snapshot, draft, original, listening = null, previousFocus = null, saving = false;
@@ -70,6 +74,7 @@
   });
   snapshot = await api.load();
   if (pendingSnapshot) snapshot = pendingSnapshot;
+  if(!receivedTheme)applyTheme(snapshot.theme);
   draft = structuredClone(snapshot.config.bindings);original = JSON.stringify(draft);
   document.getElementById('cancel-capture').addEventListener('click',stopCapture);
   document.getElementById('cancel').addEventListener('click',() => api.close());

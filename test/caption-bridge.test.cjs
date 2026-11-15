@@ -36,7 +36,7 @@ test('cross-platform Whisper defaults always select output audio and Windows nat
   const linux=captionOptions('/native','linux');assert.ok(linux.capture.args.includes('--device=@DEFAULT_MONITOR@'));
   const mac=captionOptions('/native','darwin');assert.ok(mac.capture.executable.endsWith('audiotee'));
   assert.deepEqual(mac.capture.args,['--sample-rate','16000']);
-  assert.ok(captionOptions('/native','darwin','whisper','fast').args.includes('tiny.en'));
+  assert.ok(captionOptions('/native','darwin','whisper','fast').args.includes('tiny'));
   assert.ok(captionOptions('/native','win32','windows').executable.endsWith('CaptionReader.exe'));
   assert.ok(captionOptions('/native','darwin','windows').executable.endsWith('caption-reader'));
 });

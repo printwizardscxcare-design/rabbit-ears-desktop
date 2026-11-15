@@ -22,7 +22,7 @@ function createAudioManager({win, BrowserWindow, ipcMain, profileDir, platform, 
   };
   function open() {
     if (panel && !panel.isDestroyed()) {panel.focus();return;}
-    panel=new BrowserWindow({width:960,height:850,minWidth:750,minHeight:620,title:'Audio — Rabbit-Ears.stream Desktop',backgroundColor:'#101725',
+    panel=new BrowserWindow({width:960,height:850,minWidth:750,minHeight:620,title:'Audio — rabbit-ears.stream desktop',backgroundColor:'#101725',
       webPreferences:{preload:path.join(__dirname,'audio-preload.cjs'),partition:'audio-settings',nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
     if (platform!=='darwin') panel.setMenu(null);
     panel.webContents.setIgnoreMenuShortcuts(true);

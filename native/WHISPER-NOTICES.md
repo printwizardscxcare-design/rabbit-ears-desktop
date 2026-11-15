@@ -1,6 +1,6 @@
 # Speech and audio component credits
 
-Spelunkr Desktop uses the following components for its built-in captions. Their licenses are separate from the wrapper's [MIT license](../LICENSE).
+rabbit-ears.stream desktop uses the following components for its built-in captions. Their licenses are separate from the wrapper's [MIT license](../LICENSE).
 
 | Component | Used for | License |
 | --- | --- | --- |
@@ -12,7 +12,7 @@ Spelunkr Desktop uses the following components for its built-in captions. Their 
 
 The build pins Whisper.cpp to `d1be6fde11ac6e0407606b4e42fe72d34add8037` and AudioTee to `56ac954369a09318e46b88a6eec33c2d2b0d32a3`. Downloaded speech and VAD models are checked against pinned SHA-256 hashes in [the build script](../scripts/build-whisper.cjs).
 
-Copies of the component licenses ship beside the installed caption helper: `resources/native/whisper/` under the Windows/Linux install folder, or `Spelunkr Desktop.app/Contents/Resources/native/whisper/` on Mac. The files include `LICENSE-WHISPER.txt`, `LICENSE-GGML.txt`, `LICENSE-WHISPER-MODELS.txt`, `LICENSE-SILERO.txt`, and, on Mac, `LICENSE-AUDIOTEE.txt`.
+Copies of the component licenses ship beside the installed caption helper: `resources/native/whisper/` under the Windows/Linux install folder, or `rabbit-ears.stream desktop.app/Contents/Resources/native/whisper/` on Mac. The files include `LICENSE-WHISPER.txt`, `LICENSE-GGML.txt`, `LICENSE-WHISPER-MODELS.txt`, `LICENSE-SILERO.txt`, and, on Mac, `LICENSE-AUDIOTEE.txt`.
 
 FFmpeg is a separate executable. Its supplied license is included as `LICENSE-FFMPEG.txt`, and the binary provider's source and build information is included as `SOURCE-FFMPEG.txt`. The pinned binary release and build recipes are available from [ffmpeg-static](https://github.com/eugeneware/ffmpeg-static/tree/b6.1.1); FFmpeg's source is available from [the FFmpeg project](https://ffmpeg.org/download.html#get-sources).
 

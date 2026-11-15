@@ -12,4 +12,9 @@ module.exports = async context => {
   execFileSync(path.join(resourceRoot,'native/whisper',platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'),['-version'],{stdio:'inherit',timeout:15000});
   execFileSync(process.execPath,[path.join(__dirname,'check-audio-filter.cjs'),path.join(resourceRoot,'native/whisper',platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'),fixture],{stdio:'inherit',timeout:30000});
   execFileSync(process.execPath,[path.join(__dirname,'smoke-buffered-capture.cjs'),path.join(resourceRoot,'native'),fixture],{stdio:'inherit',timeout:60000});
+  execFileSync(process.execPath,[path.join(__dirname,'check-translation.cjs'),path.join(resourceRoot,'native')],{stdio:'inherit',timeout:180000});
+  for(const model of ['tiny','base']){
+    const output=execFileSync(helper,['--test-wav',path.join(context.packager.projectDir,'native/bin/jfk.wav'),'--model',model],{encoding:'utf8',timeout:180000});
+    if(!/fellow Americans/i.test(output)||!/country/i.test(output))throw Error('Multilingual Whisper smoke check failed: '+model);
+  }
 };

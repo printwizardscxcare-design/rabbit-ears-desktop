@@ -64,6 +64,8 @@ async function build() {
   copyLibraries(buildDir);
   if (process.platform !== 'win32') fs.chmodSync(path.join(output, filename), 0o755);
   for (const [file, sha] of [
+    ['ggml-base-q5_1.bin', '422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898'],
+    ['ggml-tiny-q5_1.bin', '818710568da3ca15689e31a743197b520007872ff9576237bda97bd1b469c3d7'],
     ['ggml-base.en-q5_1.bin', '4baf70dd0d7c4247ba2b81fafd9c01005ac77c2f9ef064e00dcf195d0e2fdd2f'],
     ['ggml-tiny.en-q5_1.bin', 'c77c5766f1cef09b6b7d47f21b546cbddd4157886b3b5d6d4f709e91e66c7c2b']
   ]) await download(`https://huggingface.co/ggerganov/whisper.cpp/resolve/main/${file}`, path.join(output, file), sha);

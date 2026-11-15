@@ -3,7 +3,7 @@ const path = require('node:path');
 function captionOptions(root, platform, engine = 'whisper', speed = 'fast') {
   if (engine === 'windows' && platform === 'win32') return { executable: path.join(root, 'CaptionReader.exe'), args: [] };
   const executable = path.join(root, 'whisper', platform === 'win32' ? 'caption-reader.exe' : 'caption-reader');
-  const args = [platform === 'win32' ? '--wasapi' : '--pcm', '--model', speed === 'fast' ? 'tiny.en' : 'base.en'];
+  const args = [platform === 'win32' ? '--wasapi' : '--pcm', '--model', speed === 'fast' ? 'tiny' : 'base'];
   if (platform === 'win32') return { executable, args };
   if (platform === 'darwin') return { executable, args, capture: {
     executable: path.join(root, 'whisper/audiotee'), args: ['--sample-rate', '16000'],

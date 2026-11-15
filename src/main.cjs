@@ -50,7 +50,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       ...bounds,
       minWidth: 640,
       minHeight: 480,
-      title: /-beta\./.test(app.getVersion?.() || '') ? `rabbit-ears.stream Desktop — Beta ${app.getVersion()}` : 'rabbit-ears.stream Desktop',
+      title: /-beta\./.test(app.getVersion?.() || '') ? `rabbit-ears.stream desktop — Beta ${app.getVersion()}` : 'rabbit-ears.stream desktop',
       backgroundColor: '#101827',
       icon: path.join(__dirname, '../assets/icon.png'),
       show: false,
@@ -89,6 +89,9 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       if (input.type === 'keyDown' && input.key === 'Escape' && !videoFullscreen && win.isFullScreen()) win.setFullScreen(false);
     });
     const nativeRoot = app.isPackaged ? path.join(process.resourcesPath, 'native') : path.join(__dirname, '../native/bin');
+    const {CaptionTranslator,LANGUAGES:captionLanguages}=require('./caption-translation.cjs');
+    const translator=new CaptionTranslator({nativeRoot});let captionLanguage='en',translationKey='',translationText='',translationTimer=null;
+    win.once('closed',()=>{clearTimeout(translationTimer);translator.stop();});
     const initialOptions = captionOptions(nativeRoot, process.platform);
     const captions = new CaptionBridge(initialOptions.executable, initialOptions);
     const captionPreferences = path.join(app.getPath('userData'), 'captions.json');
@@ -131,9 +134,17 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       contents.executeJavaScript('if(location.origin==="https://rabbit-ears.stream"&&typeof captionUI!=="undefined"){captionUI.applyPreferences('+JSON.stringify(preferences)+');captionUI.closeMenu?.(false);}').catch(()=>{});
     };
     const sendCaptions = () => {
+      if(overlayEnabled&&captionLanguage!=='en'&&captionText){
+        const key=revision+'|'+captionLanguage+'|'+captionText;
+        if(key!==translationKey){translationKey=key;translationText='';clearTimeout(translationTimer);
+          const text=captionText,language=captionLanguage;
+          translationTimer=setTimeout(()=>translator.translate(text,language).then(result=>{if(key===translationKey){translationText=result;sendCaptions();}}).catch(()=>{if(key===translationKey){captionStatus='Translation is catching up; playback continues';updateCaptionMenu();}}),350);
+        }
+      }else{translationKey='';translationText='';clearTimeout(translationTimer);}
+
       if (win && !win.isDestroyed()) contents.send('desktop:captions', {
         enabled: overlayEnabled && isSite(contents.getURL()), color: captionColor, size: captionSize,
-        text: isSite(contents.getURL()) ? captionText : '', ...captionMetadata
+        text: isSite(contents.getURL()) ? captionLanguage==='en'?captionText:translationText : '', ...captionMetadata, ...(captionLanguage!=='en'?{wordOffset:0}:{}),language:captionLanguage
       });
     };
     const timing = new CaptionTiming({onCue: (text, metadata) => {captionText = text; captionMetadata = metadata; sendCaptions();}});
@@ -176,7 +187,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     };
     let transition = Promise.resolve();
     let revision = 0;
-    const buffered = createCaptionBufferManager({win,ipcMain,nativeRoot,platform:process.platform,
+    const buffered = createCaptionBufferManager({win,ipcMain,nativeRoot,platform:process.platform,translate:(text,language)=>translator.translate(text,language),
       onCooldown: waiting => {
         subtitleCoolingDown = waiting;
         if (waiting && overlayEnabled) {captionStatus = 'Subtitle cooldown…';updateCaptionMenu();}
@@ -205,7 +216,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       cues.setSpeechActive(captionEngine === 'whisper' ? false : null);
       captionStatus = !captionsOn ? 'Off' : streamCaptionStatus === 'provided' ? 'Using stream subtitles' : streamCaptionStatus === 'burned-in' ? 'Subtitles in the picture' : streamCaptionStatus === 'pending' ? 'Checking stream subtitles…' : enabled ? playbackPaused ? 'Paused' : 'Starting local captions…' : 'Off';
       buffered.set({enabled:enabled && captionEngine === 'whisper',active:enabled,speed:captionSpeed,delayMs:captionDelayMs,cooldownSeconds:subtitleCooldown,
-        rewind:rewindOnEnable,restart:enabled && captionEngine === 'whisper'});
+        rewind:rewindOnEnable,language:captionLanguage,restart:enabled && captionEngine === 'whisper'});
       updateCaptionMenu(); sendCaptions();
       transition = transition.then(async () => {
         await captions.stop();
@@ -267,7 +278,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     const availability = (event,value) => {
       if(event.sender!==contents || event.senderFrame!==contents.mainFrame || !isSite(event.senderFrame?.url) || !['pending','provided','burned-in','none'].includes(value?.status))return;
       if(streamCaptionStatus===value.status)return;
-      streamCaptionStatus=value.status;setOverlayEnabled(captionsOn);
+      translator.stop();streamCaptionStatus=value.status;setOverlayEnabled(captionsOn);
     };
     const appearance = (event,value) => {
       if(event.sender!==contents || event.senderFrame!==contents.mainFrame || !isSite(event.senderFrame?.url))return;
@@ -275,6 +286,13 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       if(typeof value?.enabled==='boolean')setOverlayEnabled(value.enabled);
     };
     const renderPolicy=event=>{if(event.sender===contents&&event.senderFrame===contents.mainFrame&&isSite(event.senderFrame?.url))renderStreamPolicy();};
+    const languageChanged=(event,value)=>{
+      if(event.sender!==contents||event.senderFrame!==contents.mainFrame||!isSite(event.senderFrame?.url)||!captionLanguages.includes(value)||captionLanguage===value)return;
+      captionLanguage=value;translator.stop();translationKey='';translationText='';clearTimeout(translationTimer);
+      buffered.set({language:captionLanguage,restart:true});sendCaptions();
+    };
+    ipcMain.on('captions:language',languageChanged);
+    win.once('closed',()=>ipcMain.removeListener('captions:language',languageChanged));
     ipcMain.on('captions:render-policy',renderPolicy);
     ipcMain.on('captions:appearance',appearance);
     ipcMain.on('captions:availability',availability);
@@ -333,8 +351,8 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       else if (contents.navigationHistory.canGoBack()) contents.navigationHistory.goBack();
     };
     const about = () => dialog.showMessageBox(win, {
-      type: 'info', title: 'About Rabbit-Ears.stream Desktop',
-      message: `Rabbit-Ears.stream Desktop ${app.getVersion()}`,
+      type: 'info', title: 'About rabbit-ears.stream desktop',
+      message: `rabbit-ears.stream desktop ${app.getVersion()}`,
       detail: 'The desktop app for Rabbit-Ears.stream. Not affiliated with the Internet Archive.\n\nThis app opens the live website. Internet access is required. The site controls channels, playback, and sign-in.\n\nRabbit Ears’s name, website, artwork, and programming belong to their respective owners. The app adds no tracking and does not download or host videos.',
       buttons: ['OK']
     });
@@ -460,7 +478,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
         { label: 'Rabbit Ears &website', click: () => openExternal(HOME) },
         { label: 'Check for app updates…', click:()=>updates.check() },
         { label: '&Project and updates', click: () => openExternal('https://github.com/printwizardscxcare-design/rabbit-ears-desktop') },
-        { label: '&About Rabbit Ears Desktop', click: about }
+        { label: '&About rabbit-ears.stream desktop', click: about }
       ] }
     ]));
     setOverlayEnabled(captionsOn);

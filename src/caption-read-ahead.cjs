@@ -23,7 +23,7 @@ class CaptionReadAhead extends EventEmitter {
     const source = sourceRequest(request);this.stop();
     const run = {source, clock: source.startMs, sentBytes: 0, processed: source.startMs, ready: false, stopped: false, wake: null, eof: false};
     this.run = run;
-    const caption = run.caption = this.spawnProcess(this.helper,['--pcm','--timed','--model',speed === 'balanced' ? 'base.en' : 'tiny.en'],
+    const caption = run.caption = this.spawnProcess(this.helper,['--pcm','--timed','--model',speed === 'balanced' ? 'base' : 'tiny'],
       {windowsHide:true,stdio:['pipe','pipe','pipe']});
     const audio = run.audio = this.spawnProcess(this.ffmpeg,['-nostdin','-hide_banner','-loglevel','error','-protocol_whitelist','https,http,tls,tcp,crypto',
       '-rw_timeout','30000000','-reconnect','1','-reconnect_streamed','1','-reconnect_on_network_error','1','-reconnect_delay_max','3',

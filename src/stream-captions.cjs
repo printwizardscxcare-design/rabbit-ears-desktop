@@ -12,6 +12,7 @@ function captionAvailability(video){
  return native?'provided':state==='none'?'none':'pending';
 }
 function installStreamCaptions({ipcRenderer,document,window,now=()=>Date.now()}){
+ let language='';
  let policy={enabled:true,color:'white',size:1},applied='',candidate='',since=0,last='';
  function tick(){
   const video=document.querySelector('#vid');
@@ -28,6 +29,9 @@ function installStreamCaptions({ipcRenderer,document,window,now=()=>Date.now()})
    document.documentElement.style.setProperty('--rabbit-desktop-caption-color',policy.color==='yellow'?'#ffeb3b':'#ffffff');
    document.documentElement.style.setProperty('--rabbit-desktop-caption-visibility',policy.enabled?'visible':'hidden');
   }
+  const selected=video?.dataset.captionLanguage;
+  if(['en','zh','hi','es','ar','fr','bn','pt','id','ur'].includes(selected)&&selected!==language){language=selected;ipcRenderer.send('captions:language',selected);}
+  if(video?.dataset.captionAvailability==='burned-in')for(const button of document.querySelectorAll('#cc,[data-remote="cc"]')){button.title='Captions are embedded in this show';button.setAttribute('aria-label',button.title);}
   const key=(video?.currentSrc||'')+'|'+policy.enabled+'|'+policy.color+'|'+policy.size+'|'+(video?.dataset.captionAvailability||'');
   if(video&&key!==applied){ipcRenderer.send('captions:render-policy');applied=key;}
   const status=document.body?.dataset?.mode&&document.body.dataset.mode!=='tv'?'pending':captionAvailability(video),signature=(video?.currentSrc||'')+'|'+status;

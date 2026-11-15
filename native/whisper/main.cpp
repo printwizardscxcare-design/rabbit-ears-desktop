@@ -101,12 +101,12 @@ class Recognizer {
     int quiet = 0, voiced = 0;
     bool speech_active = false;
     bool fast = false, continuation = false;
-    bool timed = false;
+    bool timed = false, multilingual = false;
     uint64_t sample_clock = 0, phrase_start = 0;
     uint64_t utterance = 0;
     size_t next_submit = 16384;
 public:
-    Recognizer(const fs::path &root, const std::string &model, bool timed_input = false) : fast(model == "tiny.en"), timed(timed_input) {
+    Recognizer(const fs::path &root, const std::string &model, bool timed_input = false) : fast(model == "tiny.en" || model == "tiny"), timed(timed_input), multilingual(model == "tiny" || model == "base") {
         auto cp = whisper_context_default_params(); cp.use_gpu = false;
         ctx = whisper_init_from_file_with_params((root / ("ggml-" + model + "-q5_1.bin")).u8string().c_str(), cp);
         if (!ctx) throw std::runtime_error("The bundled Whisper model could not load. Reinstall the app.");
@@ -125,7 +125,7 @@ public:
     std::string decode(const std::vector<float> &audio) {
         auto p = whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
         p.n_threads = std::max(1u, std::min(4u, std::thread::hardware_concurrency()));
-        p.language = "en"; p.translate = false; p.no_context = true;
+        p.language = multilingual ? "auto" : "en"; p.translate = multilingual; p.no_context = true;
         p.print_realtime = p.print_progress = p.print_timestamps = p.print_special = false;
         p.suppress_blank = true; p.suppress_nst = true; p.temperature_inc = 0;
         if (timed) {p.token_timestamps = true;p.split_on_word = true;p.max_len = 64;}
@@ -300,7 +300,7 @@ int main(int argc, char **argv) {
             else if (arg=="--timed") timed=true;
             else if (arg!="--pcm") throw std::runtime_error("Unknown caption helper argument");
         }
-        if (model!="base.en" && model!="tiny.en") throw std::runtime_error("Unknown speech model");
+        if (model!="base.en" && model!="tiny.en" && model!="base" && model!="tiny") throw std::runtime_error("Unknown speech model");
         whisper_log_set([](ggml_log_level, const char *, void *) {}, nullptr);
         const auto root = executable_dir(argv[0]);
         ggml_backend_load_all_from_path(root.u8string().c_str());

@@ -87,3 +87,11 @@ test('closing the native window does not access its destroyed webContents getter
   Object.defineProperty(h.parent,'webContents',{get(){throw Error('Object has been destroyed');}});
   assert.doesNotThrow(()=>h.parent.emit('closed'));
 });
+
+test('Controls follows player themes without changing or saving bindings',()=>{
+ const h=setup(),event=h.source(h.parent.webContents),before=structuredClone(h.manager.snapshot().config);
+ h.ipc.emit('desktop:theme',event,'gutter');h.manager.open();assert.equal(h.load().theme,'gutter');
+ for(const skin of ['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']){h.ipc.emit('desktop:theme',event,skin);assert.equal(h.manager.snapshot().theme,skin);assert.deepEqual(h.child.webContents.messages.at(-1),['controls:theme',skin]);}
+ h.ipc.emit('desktop:theme',event,'unknown');h.ipc.emit('desktop:theme',{...event,senderFrame:{url:'https://rabbit-ears.stream/'}},'retro');h.ipc.emit('desktop:theme',h.source(h.child.webContents),'retro');assert.equal(h.load().theme,'gutter');assert.deepEqual(h.manager.snapshot().config,before);assert.equal(h.writes,0);
+ h.child.close();h.manager.open();assert.equal(h.load().theme,'gutter');h.manager.destroy();assert.equal(h.ipc.listenerCount('desktop:theme'),0);
+});

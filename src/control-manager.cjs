@@ -10,7 +10,8 @@ function createControlManager({win, BrowserWindow, ipcMain, profileDir, platform
   const file = path.join(profileDir, 'controls.json');
   const settingsFile = path.join(__dirname, 'controls.html');
   const settingsUrl = pathToFileURL(settingsFile).href;
-  let current = model.defaults(platform), settingsWindow = null, catalog = [];
+  let current = model.defaults(platform), settingsWindow = null, catalog = [], theme='pixel';
+  const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
   try {current = model.config(JSON.parse(io.readFileSync(file, 'utf8')), platform);} catch {}
   const fromPlayer = event => event.sender === win.webContents && event.senderFrame === win.webContents.mainFrame && isSite(event.senderFrame?.url);
   const fromSettings = event => settingsWindow && !settingsWindow.isDestroyed() && event.sender === settingsWindow.webContents &&
@@ -21,12 +22,16 @@ function createControlManager({win, BrowserWindow, ipcMain, profileDir, platform
   const snapshot = () => {
     const pages = model.mergePages(current.pageActions, catalog);
     const expanded = model.config(current, platform, pages);
-    return {platform, config: expanded, actions: model.actions(platform, pages)};
+    return {platform, config: expanded, actions: model.actions(platform, pages), theme};
+  };
+  const receiveTheme=(event,value)=>{
+    if(!fromPlayer(event)||!skins.has(value)||value===theme)return;
+    theme=value;if(settingsWindow&&!settingsWindow.isDestroyed())settingsWindow.webContents.send('controls:theme',theme);
   };
   function open() {
     if (settingsWindow && !settingsWindow.isDestroyed()) {settingsWindow.focus();return;}
     settingsWindow = new BrowserWindow({width: 1000, height: 780, minWidth: 760, minHeight: 540,
-      title: 'Controls — Rabbit-Ears.stream Desktop', backgroundColor: '#1c0a57', show: true,
+      title: 'Controls — rabbit-ears.stream desktop', backgroundColor: '#101725', show: true,
       webPreferences: {preload: path.join(__dirname, 'controls-preload.cjs'), partition: 'controls-settings',
         nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true}});
     if (platform !== 'darwin') settingsWindow.setMenu(null);
@@ -79,6 +84,7 @@ function createControlManager({win, BrowserWindow, ipcMain, profileDir, platform
   ipcMain.on('controls:action', perform);
   ipcMain.on('controls:close', close);
   ipcMain.on('controls:playback', playback);
+  ipcMain.on('desktop:theme', receiveTheme);
   ipcMain.handle('controls:load', load);
   ipcMain.handle('controls:save', save);
   win.webContents.on('did-finish-load', push);
@@ -86,6 +92,7 @@ function createControlManager({win, BrowserWindow, ipcMain, profileDir, platform
     ipcMain.removeListener('controls:ready', ready);ipcMain.removeListener('controls:catalog', receivedCatalog);
     ipcMain.removeListener('controls:action', perform);ipcMain.removeListener('controls:close', close);
     ipcMain.removeListener('controls:playback', playback);
+    ipcMain.removeListener('desktop:theme', receiveTheme);
     ipcMain.removeHandler('controls:load');ipcMain.removeHandler('controls:save');
     playerContents.removeListener('did-finish-load', push);
     if (settingsWindow && !settingsWindow.isDestroyed()) settingsWindow.close();

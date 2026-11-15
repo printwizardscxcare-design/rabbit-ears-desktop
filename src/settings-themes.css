@@ -27,3 +27,8 @@ body[data-skin=pixel] :is(main,section,button){border-width:2px}
 body[data-skin=theatre] header{border-bottom:3px double var(--yellow)}
 body[data-skin=metal] :is(header,section){border-top:3px ridge var(--edge)}body[data-skin=metal] h1{text-transform:uppercase;letter-spacing:1px}
 body[data-skin=gutter] header{border-bottom:3px dashed var(--yellow)}body[data-skin=gutter] section{border-style:dashed}
+
+/* Controls and assignment capture use the same surfaces as Audio. */
+h2.group{font-family:var(--heading);color:var(--yellow);background:var(--bg);border-color:var(--edge);text-shadow:none}
+.action-name{text-shadow:none}.binding{background:var(--bg);border-color:var(--edge);border-radius:var(--radius);color:var(--ink)}.binding-label,.unassigned{color:var(--muted)}.binding button{color:var(--ink)}.binding button:hover{background:var(--panel);color:var(--yellow)}
+.capture{background:color-mix(in srgb,var(--bg) 90%,transparent)}.capture-card{background:var(--panel);border-color:var(--edge);border-radius:var(--radius);box-shadow:var(--depth)}.capture-card h2{font-family:var(--heading);color:var(--yellow)}

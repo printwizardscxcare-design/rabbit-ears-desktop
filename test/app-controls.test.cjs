@@ -64,7 +64,7 @@ async function appHarness(platform, savedCaptions) {
   const electron = {app, BrowserWindow: Window, Menu, ipcMain, dialog: {}, shell: {}, screen: {getAllDisplays: () => []},
     session: {fromPartition: () => ({setPermissionRequestHandler() {}, setPermissionCheckHandler() {}, on() {}})}};
   vm.runInNewContext(fs.readFileSync(main, 'utf8'), {
-    __dirname: path.dirname(main), process: {platform, env: {}},
+    setTimeout,clearTimeout,__dirname: path.dirname(main), process: {platform, env: {}},
     require(name) {
       if (name === 'electron') return electron;
       if (name === 'node:fs') return {

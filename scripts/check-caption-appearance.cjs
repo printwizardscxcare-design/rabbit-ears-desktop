@@ -44,6 +44,19 @@ app.whenReady().then(async()=>{try{
  // Opening after the selection must also use the currently selected theme.
  item('audio-settings').click();const reopenedAudio=BrowserWindow.getAllWindows().find(w=>w!==player);
  await until(()=>reopenedAudio.webContents.executeJavaScript('document.body.dataset.skin==="gutter"').catch(()=>false));reopenedAudio.close();await wait(100);
+ console.log('Checking Controls theme and unsaved bindings');
+ item('controls-settings').click();let controls=BrowserWindow.getAllWindows().find(w=>w!==player);
+ await until(()=>controls.webContents.executeJavaScript('document.body.dataset.skin==="gutter"&&document.querySelectorAll(".row").length>0').catch(()=>false));
+ await controls.webContents.executeJavaScript('document.querySelector(".binding button").click()');
+ const draft=await controls.webContents.executeJavaScript('document.getElementById("list").textContent');
+ for(const [skin,colors] of Object.entries(palette)){
+  await player.webContents.executeJavaScript('document.body.dataset.skin='+JSON.stringify(skin));
+  await until(()=>controls.webContents.executeJavaScript('document.body.dataset.skin==='+JSON.stringify(skin)));
+  const state=await controls.webContents.executeJavaScript('(()=>{const s=getComputedStyle(document.body);return {colors:[s.getPropertyValue("--panel").trim(),s.getPropertyValue("--yellow").trim()],draft:document.getElementById("list").textContent,dirty:!document.getElementById("save").disabled}})()');
+  assert.deepEqual(state.colors,colors);assert.equal(state.draft,draft);assert.equal(state.dirty,true);
+ }
+ await controls.webContents.executeJavaScript('document.getElementById("cancel").click()');await until(()=>controls.isDestroyed());assert.equal(fs.existsSync(path.join(profile,'controls.json')),false);
+ item('controls-settings').click();controls=BrowserWindow.getAllWindows().find(w=>w!==player);await until(()=>controls.webContents.executeJavaScript('document.body.dataset.skin==="gutter"&&document.querySelectorAll(".row").length>0').catch(()=>false));assert.equal(await controls.webContents.executeJavaScript('document.getElementById("save").disabled'),true);controls.close();await wait(100);
  await player.webContents.executeJavaScript('document.body.dataset.skin="pixel"');
  console.log('Checking real caption styles');
  for(const full of [false,true]){
@@ -81,5 +94,5 @@ app.whenReady().then(async()=>{try{
   assert.deepEqual(player.getNormalBounds(),originalBounds);assert.equal(await player.webContents.executeJavaScript('getComputedStyle(document.getElementById("desktop-app-menu")).display'),'flex');assert.equal(BrowserWindow.getAllWindows().length,count);
  }
  assert.equal(await player.webContents.executeJavaScript('window.sitePreferenceWrites'),0);assert.equal(await player.webContents.executeJavaScript('localStorage.getItem("site-caption-test")'),null);
- console.log('PASS: Audio follows all nine themes on open, while changing themes and after reopening without changing sound settings. Normal app menu headings open their native dropdowns, hide only in compact mode and return afterward. 20 real Chromium comparisons match stream and engine size/color; fullscreen, source changes, site controls and reload preserve preferences. Same-window compact/return preserves bounds, video, clock and pause state with the themed bezel and transport, without popup, reload or title bar.');clearTimeout(timeout);player.close();app.exit(0);
+ console.log('PASS: Controls follows all nine themes while preserving unsaved bindings and Cancel/reopen behavior. Audio follows all nine themes on open, while changing themes and after reopening without changing sound settings. Normal app menu headings open their native dropdowns, hide only in compact mode and return afterward. 20 real Chromium comparisons match stream and engine size/color; fullscreen, source changes, site controls and reload preserve preferences. Same-window compact/return preserves bounds, video, clock and pause state with the themed bezel and transport, without popup, reload or title bar.');clearTimeout(timeout);player.close();app.exit(0);
  }catch(e){console.error(e);clearTimeout(timeout);app.exit(1);}});
