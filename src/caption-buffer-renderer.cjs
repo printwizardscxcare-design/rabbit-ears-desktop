@@ -11,7 +11,7 @@ module.exports = function installCaptionBuffer({ipcRenderer,document,window,cach
   const currentVideo = () => document.querySelector('#vid');
   const playerPaused = () => {
     const button = document.querySelector('#pause');
-    return button && typeof button.click === 'function' ? /^Play\b/i.test(button.getAttribute('title') || '') : video?.paused;
+    return button && typeof button.click === 'function' ? /^Play\b/i.test(button.getAttribute('data-i18n-source-title') || button.getAttribute('title') || '') : video?.paused;
   };
   const siteKey = key => {
     if (!window.dispatchEvent || !window.KeyboardEvent) return false;

@@ -58,6 +58,19 @@ app.whenReady().then(async()=>{try{
  await controls.webContents.executeJavaScript('document.getElementById("cancel").click()');await until(()=>controls.isDestroyed());assert.equal(fs.existsSync(path.join(profile,'controls.json')),false);
  item('controls-settings').click();controls=BrowserWindow.getAllWindows().find(w=>w!==player);await until(()=>controls.webContents.executeJavaScript('document.body.dataset.skin==="gutter"&&document.querySelectorAll(".row").length>0').catch(()=>false));assert.equal(await controls.webContents.executeJavaScript('document.getElementById("save").disabled'),true);controls.close();await wait(100);
  await player.webContents.executeJavaScript('document.body.dataset.skin="pixel"');
+ console.log('Checking native menus and settings languages');
+ item('controls-settings').click();controls=BrowserWindow.getAllWindows().find(w=>w!==player);await until(()=>controls.webContents.executeJavaScript('document.querySelectorAll(".row").length>0').catch(()=>false));
+ await controls.webContents.executeJavaScript('document.querySelector(".binding button").click()');
+ for(const language of ['es','fr','pt','zh','hi','ar','bn','id','ur']){
+  await player.webContents.executeJavaScript('document.getElementById("vid").dataset.captionLanguage='+JSON.stringify(language));
+  await until(()=>controls.webContents.executeJavaScript('document.documentElement.lang==='+JSON.stringify(language)));
+  assert.notEqual(item('captions-off').label,'Off');assert.equal(await controls.webContents.executeJavaScript('document.getElementById("save").disabled'),false,'Language must preserve unsaved bindings');
+  assert.equal(await controls.webContents.executeJavaScript('document.documentElement.dir'),['ar','ur'].includes(language)?'rtl':'ltr');
+ }
+ await controls.webContents.executeJavaScript('document.getElementById("cancel").click()');await until(()=>controls.isDestroyed());assert.equal(fs.existsSync(path.join(profile,'controls.json')),false);
+ item('audio-settings').click();const localizedAudio=BrowserWindow.getAllWindows().find(w=>w!==player);await until(()=>localizedAudio.webContents.executeJavaScript('document.documentElement.lang==="ur"').catch(()=>false));
+ assert.equal(await localizedAudio.webContents.executeJavaScript('document.documentElement.dir'),'rtl');
+ await player.webContents.executeJavaScript('document.getElementById("vid").dataset.captionLanguage="en"');await until(()=>localizedAudio.webContents.executeJavaScript('document.documentElement.lang==="en"'));localizedAudio.close();await wait(100);assert.equal(item('captions-off').label,'Off');
  console.log('Checking real caption styles');
  for(const full of [false,true]){
   console.log('Caption layout fullscreen='+full);

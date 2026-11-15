@@ -36,6 +36,6 @@ function createWindowMode({win,ipcMain,screen,Menu,errorPage,allowOnTop=true}){
  const navigation=(_event,url,inPlace,isMainFrame)=>{if(isMainFrame&&!inPlace&&!isSite(url)&&compact)toggle();};
  ipcMain.on('desktop:window-action',action);ipcMain.on('desktop:window-ready',ready);ipcMain.on('desktop:menu-open',openMenu);contents.on('did-finish-load',notify);contents.on('did-start-navigation',navigation);win.on('maximize',notify);win.on('unmaximize',notify);
  win.once('closed',()=>{ipcMain.removeListener('desktop:window-action',action);ipcMain.removeListener('desktop:window-ready',ready);ipcMain.removeListener('desktop:menu-open',openMenu);contents.removeListener('did-finish-load',notify);contents.removeListener('did-start-navigation',navigation);});
- return {toggle,get compact(){return compact;},savedState(){return compact?{x:original.x,y:original.y,width:original.width,height:original.height,maximized:original.maximized}:{...win.getNormalBounds(),maximized:win.isMaximized()};}};
+ return {toggle,refreshMenus:notify,get compact(){return compact;},savedState(){return compact?{x:original.x,y:original.y,width:original.width,height:original.height,maximized:original.maximized}:{...win.getNormalBounds(),maximized:win.isMaximized()};}};
 }
 module.exports={createWindowMode};

@@ -10,10 +10,12 @@ function createControlManager({win, BrowserWindow, ipcMain, profileDir, platform
   const file = path.join(profileDir, 'controls.json');
   const settingsFile = path.join(__dirname, 'controls.html');
   const settingsUrl = pathToFileURL(settingsFile).href;
-  let current = model.defaults(platform), settingsWindow = null, catalog = [], theme='pixel';
+  let current = model.defaults(platform), settingsWindow = null, catalog = [], theme='pixel',language='en';
   const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
   try {current = model.config(JSON.parse(io.readFileSync(file, 'utf8')), platform);} catch {}
   const fromPlayer = event => event.sender === win.webContents && event.senderFrame === win.webContents.mainFrame && isSite(event.senderFrame?.url);
+  const receiveLanguage=(event,value)=>{if(!fromPlayer(event)||!['en','zh','hi','es','ar','fr','bn','pt','id','ur'].includes(value))return;language=value;if(settingsWindow&&!settingsWindow.isDestroyed())settingsWindow.webContents.send('controls:language',language);};
+  ipcMain.on('captions:language',receiveLanguage);
   const fromSettings = event => settingsWindow && !settingsWindow.isDestroyed() && event.sender === settingsWindow.webContents &&
     event.senderFrame === settingsWindow.webContents.mainFrame && event.senderFrame?.url === settingsUrl;
   const push = () => {
@@ -22,7 +24,7 @@ function createControlManager({win, BrowserWindow, ipcMain, profileDir, platform
   const snapshot = () => {
     const pages = model.mergePages(current.pageActions, catalog);
     const expanded = model.config(current, platform, pages);
-    return {platform, config: expanded, actions: model.actions(platform, pages), theme};
+    return {platform, config: expanded, actions: model.actions(platform, pages), theme, language};
   };
   const receiveTheme=(event,value)=>{
     if(!fromPlayer(event)||!skins.has(value)||value===theme)return;
@@ -89,6 +91,7 @@ function createControlManager({win, BrowserWindow, ipcMain, profileDir, platform
   ipcMain.handle('controls:save', save);
   win.webContents.on('did-finish-load', push);
   const destroy = () => {
+    ipcMain.removeListener('captions:language',receiveLanguage);
     ipcMain.removeListener('controls:ready', ready);ipcMain.removeListener('controls:catalog', receivedCatalog);
     ipcMain.removeListener('controls:action', perform);ipcMain.removeListener('controls:close', close);
     ipcMain.removeListener('controls:playback', playback);

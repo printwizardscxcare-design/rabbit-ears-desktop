@@ -1,6 +1,6 @@
 {
   "name": "rabbit-ears-stream-desktop",
-  "version": "0.1.0-beta.7",
+  "version": "0.1.0-beta.8",
   "description": "Rabbit-Ears.stream Desktop with stream-first captions, local speech fallback and audio controls.",
   "main": "src/main.cjs",
   "author": {

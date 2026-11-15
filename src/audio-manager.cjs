@@ -8,14 +8,16 @@ const {isSite} = require('./policy.cjs');
 function createAudioManager({win, BrowserWindow, ipcMain, profileDir, platform, io=fs, onCleanup=()=>{}}) {
   const player=win.webContents, file=path.join(profileDir,'audio.json'), html=path.join(__dirname,'audio.html');
   const settingsUrl=pathToFileURL(html).href;
-  let current=model.config(), panel=null, status={text:'Original sound'}, theme='pixel';
+  let current=model.config(), panel=null, status={text:'Original sound'}, theme='pixel',language='en';
   const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
   try {current=model.config(JSON.parse(io.readFileSync(file,'utf8')));} catch {}
   onCleanup(current.cleanup);
   const fromPlayer = event => event.sender===player && event.senderFrame===player.mainFrame && isSite(event.senderFrame?.url);
+  const receiveLanguage=(event,value)=>{if(!fromPlayer(event)||!['en','zh','hi','es','ar','fr','bn','pt','id','ur'].includes(value))return;language=value;if(panel&&!panel.isDestroyed())panel.webContents.send('audio:language',language);};
+  ipcMain.on('captions:language',receiveLanguage);
   const fromPanel = event => panel && !panel.isDestroyed() && event.sender===panel.webContents && event.senderFrame===panel.webContents.mainFrame && event.senderFrame?.url===settingsUrl;
   const push = () => {if (!win.isDestroyed() && isSite(player.getURL())) player.send('desktop:audio-state',current.current);};
-  const snapshot = () => ({config:current,presets:model.PRESETS,status,theme});
+  const snapshot = () => ({config:current,presets:model.PRESETS,status,theme,language});
   const receiveTheme=(event,value)=>{
     if(!fromPlayer(event)||!skins.has(value)||value===theme)return;
     theme=value;if(panel&&!panel.isDestroyed())panel.webContents.send('audio:theme',theme);
@@ -54,6 +56,7 @@ function createAudioManager({win, BrowserWindow, ipcMain, profileDir, platform, 
   ipcMain.on('audio:ready',ready);ipcMain.on('audio:status',receiveStatus);ipcMain.on('audio:close',close);ipcMain.on('desktop:theme',receiveTheme);
   ipcMain.handle('audio:load',load);ipcMain.handle('audio:save',save);player.on('did-finish-load',push);
   function destroy() {
+    ipcMain.removeListener('captions:language',receiveLanguage);
     ipcMain.removeListener('audio:ready',ready);ipcMain.removeListener('audio:status',receiveStatus);ipcMain.removeListener('audio:close',close);ipcMain.removeListener('desktop:theme',receiveTheme);
     ipcMain.removeHandler('audio:load');ipcMain.removeHandler('audio:save');player.removeListener('did-finish-load',push);
     if (panel && !panel.isDestroyed()) panel.close();

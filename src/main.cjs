@@ -17,6 +17,13 @@ const {createUpdater}=require('./updater.cjs');
 const {autoUpdater}=require('electron-updater');
 const {createWindowMode}=require('./window-mode.cjs');
 const {configureAudioCors}=require('./audio-cors.cjs');
+const interfaceText=require('./ui-language.cjs')({dictionaries:require('./ui-translations.json')});
+let appLanguage='en';
+const menuSources=new WeakMap();
+function localizedMessage(window,options){const next={...options};for(const key of ['title','message','detail'])if(typeof next[key]==='string')next[key]=interfaceText.text(next[key],appLanguage);if(Array.isArray(next.buttons))next.buttons=next.buttons.map(label=>interfaceText.text(label,appLanguage));return dialog.showMessageBox(window,next);}
+const localizedDialog={...dialog,showMessageBox:localizedMessage};
+function translateMenu(){const visit=menu=>{for(const item of menu?.items||[]){if(typeof item.label==='string'){let entry=menuSources.get(item);if(!entry||item.label!==entry.translated)entry={source:item.label,translated:item.label};const source=entry.source.replace(/&([^&])/g,'$1');entry.translated=appLanguage==='en'?entry.source:interfaceText.text(source,appLanguage);item.label=entry.translated;menuSources.set(item,entry);}if(item.submenu)visit(item.submenu);}};visit(Menu.getApplicationMenu());}
+
 
 app.setName('Rabbit-Ears.stream Desktop');
 app.enableSandbox();
@@ -81,7 +88,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     let videoFullscreen = false;
     const updateFullscreenMenu = () => {
       const item = Menu.getApplicationMenu()?.getMenuItemById('video-fullscreen');
-      if (item) item.label = videoFullscreen ? 'Exit video fullscreen (Esc)' : 'Enter video fullscreen';
+      if (item) item.label = videoFullscreen ? 'Exit video fullscreen (Esc)' : 'Enter video fullscreen';translateMenu();windowMode.refreshMenus?.();
     };
     contents.on('enter-html-full-screen', () => {videoFullscreen = true;updateFullscreenMenu();});
     contents.on('leave-html-full-screen', () => {videoFullscreen = false;updateFullscreenMenu();});
@@ -184,6 +191,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
         const choice = menu.getMenuItemById(id);
         if (choice) choice.checked = true;
       }
+      translateMenu();windowMode.refreshMenus?.();
     };
     let transition = Promise.resolve();
     let revision = 0;
@@ -273,7 +281,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     captions.on('failure', async message => {
       if (!overlayEnabled || !captureAccepting) return;
       await setOverlayEnabled(false);
-      if (win && !win.isDestroyed()) dialog.showMessageBox(win, { type: 'info', title: 'In-app captions', message, detail: 'Whisper captions run locally. Try the Faster recognition setting on an older computer. Windows Live Captions remains an optional Windows 11 engine. See Help for platform setup instructions.' });
+      if (win && !win.isDestroyed()) localizedMessage(win, { type: 'info', title: 'In-app captions', message, detail: 'Whisper captions run locally. Try the Faster recognition setting on an older computer. Windows Live Captions remains an optional Windows 11 engine. See Help for platform setup instructions.' });
     });
     const availability = (event,value) => {
       if(event.sender!==contents || event.senderFrame!==contents.mainFrame || !isSite(event.senderFrame?.url) || !['pending','provided','burned-in','none'].includes(value?.status))return;
@@ -288,6 +296,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     const renderPolicy=event=>{if(event.sender===contents&&event.senderFrame===contents.mainFrame&&isSite(event.senderFrame?.url))renderStreamPolicy();};
     const languageChanged=(event,value)=>{
       if(event.sender!==contents||event.senderFrame!==contents.mainFrame||!isSite(event.senderFrame?.url)||!captionLanguages.includes(value)||captionLanguage===value)return;
+      appLanguage=value;translateMenu();windowMode.refreshMenus?.();contents.send('desktop:language',value);
       captionLanguage=value;translator.stop();translationKey='';translationText='';clearTimeout(translationTimer);
       buffered.set({language:captionLanguage,restart:true});sendCaptions();
     };
@@ -297,7 +306,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     ipcMain.on('captions:appearance',appearance);
     ipcMain.on('captions:availability',availability);
     contents.on('did-start-navigation',(_event,_url,inPlace,isMainFrame)=>{if(isMainFrame&&!inPlace){streamCaptionStatus='pending';setOverlayEnabled(captionsOn);}});
-    contents.on('did-finish-load',()=>{contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor,size:captionSize});sendCaptions();});
+    contents.on('did-finish-load',()=>{contents.send('desktop:caption-policy',{enabled:captionsOn,color:captionColor,size:captionSize});if(!isSite(contents.getURL()))contents.send('desktop:language',appLanguage);sendCaptions();});
     contents.on('did-navigate-in-page', () => {
       if (overlayEnabled && captionEngine === 'whisper') return; // The renderer resets when the actual video source changes.
       else { cues.clear(); sendCaptions(); }
@@ -334,7 +343,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       await setOverlayEnabled(false);
       // A fixed OS executable, never a path or command supplied by the website.
       const executable = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'LiveCaptions.exe');
-      const unavailable = () => dialog.showMessageBox(win, {
+      const unavailable = () => localizedMessage(win, {
         type: 'info', title: 'Windows Live Captions',
         message: 'Windows Live Captions could not be opened.',
         detail: 'Live Captions requires Windows 11 version 22H2 or later. You can also open it from Start → Accessibility → Live captions, or press Windows+Ctrl+L. Windows may ask you to download speech files on first use.',
@@ -350,7 +359,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       if (failed) loadHome();
       else if (contents.navigationHistory.canGoBack()) contents.navigationHistory.goBack();
     };
-    const about = () => dialog.showMessageBox(win, {
+    const about = () => localizedMessage(win, {
       type: 'info', title: 'About rabbit-ears.stream desktop',
       message: `rabbit-ears.stream desktop ${app.getVersion()}`,
       detail: 'The desktop app for Rabbit-Ears.stream. Not affiliated with the Internet Archive.\n\nThis app opens the live website. Internet access is required. The site controls channels, playback, and sign-in.\n\nRabbit Ears’s name, website, artwork, and programming belong to their respective owners. The app adds no tracking and does not download or host videos.',
@@ -395,7 +404,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
       }});
     const audio = createAudioManager({win,BrowserWindow,ipcMain,profileDir:app.getPath('userData'),platform:process.platform,io:fs,
       onCleanup:cleanup=>buffered.set({cleanup,restart:true,rewind:false})});
-    const updates=createUpdater({app,win,dialog,autoUpdater});
+    const updates=createUpdater({app,win,dialog:localizedDialog,autoUpdater});
     Menu.setApplicationMenu(Menu.buildFromTemplate([
       ...(process.platform === 'darwin' ? [{role: 'appMenu'}] : []),
       { label: '&Rabbit Ears', submenu: [
@@ -425,8 +434,8 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
           { id: 'caption-engine-windows', label: 'Windows Live Captions (Windows 11)', visible: process.platform === 'win32', type: 'radio', checked: captionEngine === 'windows', click: () => setCaptionEngine('windows') }
         ] },
         { id: 'caption-speed', label: 'Recognition speed', enabled: overlayEnabled && captionEngine === 'whisper', submenu: [
-          { id: 'caption-speed-balanced', label: 'Balanced (base English)', type: 'radio', checked: captionSpeed === 'balanced', click: () => setCaptionSpeed('balanced') },
-          { id: 'caption-speed-fast', label: 'Faster (tiny English)', type: 'radio', checked: captionSpeed === 'fast', click: () => setCaptionSpeed('fast') }
+          { id: 'caption-speed-balanced', label: 'Balanced (multilingual base)', type: 'radio', checked: captionSpeed === 'balanced', click: () => setCaptionSpeed('balanced') },
+          { id: 'caption-speed-fast', label: 'Faster (multilingual tiny)', type: 'radio', checked: captionSpeed === 'fast', click: () => setCaptionSpeed('fast') }
         ] },
         { label: '&Text color', submenu: [
           { id: 'caption-color-white', label: '&White', type: 'radio', checked: captionColor === 'white', click: () => setCaptionColor('white') },
@@ -459,7 +468,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
         { id: 'caption-status', label: 'Off', enabled: false },
         { type: 'separator' },
         { label: '&Open Windows caption window', visible: process.platform === 'win32', click: startLiveCaptions },
-        { label: 'About Windows captions', visible: process.platform === 'win32', click: () => dialog.showMessageBox(win, {
+        { label: 'About Windows captions', visible: process.platform === 'win32', click: () => localizedMessage(win, {
           title: 'Windows Live Captions', message: 'Captions for whatever is playing.',
           detail: 'Press Ctrl+Shift+L to toggle transparent, text-only captions inside the video. Choose white/yellow and a text size under Captions. Fullscreen captions adapt to the screen width and height.\n\nCaptions clear after roughly 1.5 seconds without new words, with up to 4 seconds of initial reading time for a batch of text. Windows supplies no exact speech-end timings, so pauses are inferred from recognition updates. Old words stay cleared when the next phrase begins.\n\nWindows Live Captions generates the text locally. Its window is minimized while in-app captions run. This optional engine requires Windows 11 22H2 or newer. Choose it under Caption engine. Built-in Whisper captions work on Windows 10 and 11. This captions all PC audio; no audio or transcript is saved. Open Windows caption window remains available as a fallback.'
         }) }
@@ -471,9 +480,9 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
         { id: 'team-support', label: 'Buy the team a &beer', click: () => openExternal('https://rabbit-ears.stream/support/') },
         { type: 'separator' },
         { label: 'Linux setup and troubleshooting', visible: process.platform === 'linux', click: () => openExternal('https://github.com/printwizardscxcare-design/rabbit-ears-desktop/blob/main/docs/LINUX.md') },
-        { label: 'About Linux captions', visible: process.platform === 'linux', click: () => dialog.showMessageBox(win, { title: 'Linux captions', message: 'Local English captions prepared ahead of playback.', detail: 'Press Ctrl+Shift+L to toggle captions. Whisper reads the channel file directly and prepares timestamped subtitles at least 15 seconds ahead of the picture. Playback pauses while the cache fills. Captions work with the player muted and do not use other apps or a microphone. No audio or transcript is saved. Color, size, subtitle delay, two-line blocks, and fullscreen sizing use the same controls on every platform.' }) },
+        { label: 'About Linux captions', visible: process.platform === 'linux', click: () => localizedMessage(win, { title: 'Linux captions', message: 'Local English captions prepared ahead of playback.', detail: 'Press Ctrl+Shift+L to toggle captions. Whisper reads the channel file directly and prepares timestamped subtitles at least 15 seconds ahead of the picture. Playback pauses while the cache fills. Captions work with the player muted and do not use other apps or a microphone. No audio or transcript is saved. Color, size, subtitle delay, two-line blocks, and fullscreen sizing use the same controls on every platform.' }) },
         { label: 'Mac setup and troubleshooting', visible: process.platform === 'darwin', click: () => openExternal('https://github.com/printwizardscxcare-design/rabbit-ears-desktop/blob/main/docs/MAC.md') },
-        { label: 'About built-in captions', click: () => dialog.showMessageBox(win, { title: 'Whisper captions', message: 'Cached subtitles on Windows, Mac, and Linux.', detail: 'The bundled English Whisper models recognize the channel audio ahead of playback. Existing stream subtitles are used first. Local recognition fills in only when a show has no usable subtitle track. Text follows the video timestamps, so pauses and seeks stay aligned. Playback keeps running while captions catch up. Built-in captions read the channel file directly, work with the player muted, and do not pick up other apps or a microphone. Audio and subtitles stay in memory and are not saved. Use Faster recognition on a slower computer. Words and estimated timings can still be imperfect.' }) },
+        { label: 'About built-in captions', click: () => localizedMessage(win, { title: 'Whisper captions', message: 'Cached subtitles on Windows, Mac, and Linux.', detail: 'The bundled English Whisper models recognize the channel audio ahead of playback. Existing stream subtitles are used first. Local recognition fills in only when a show has no usable subtitle track. Text follows the video timestamps, so pauses and seeks stay aligned. Playback keeps running while captions catch up. Built-in captions read the channel file directly, work with the player muted, and do not pick up other apps or a microphone. Audio and subtitles stay in memory and are not saved. Use Faster recognition on a slower computer. Words and estimated timings can still be imperfect.' }) },
         { label: '&Keyboard and controller controls', click: controls.open },
         { label: 'Rabbit Ears &website', click: () => openExternal(HOME) },
         { label: 'Check for app updates…', click:()=>updates.check() },

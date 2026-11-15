@@ -2,8 +2,10 @@
 
 // Runs in an isolated world. No Node or IPC functions are exposed to the site.
 const { ipcRenderer } = require('electron');
+if(process.isMainFrame&&location.protocol==='file:'&&location.pathname.endsWith('/offline.html'))ipcRenderer.on('desktop:language',(_event,value)=>window.dispatchEvent(new CustomEvent('re:caption-language',{detail:value}))); 
 if(process.isMainFrame && typeof installWindowChrome==='function')installWindowChrome({ipcRenderer,document,window});
 if (location.origin === 'https://rabbit-ears.stream' && process.isMainFrame) {
+  ipcRenderer.on('desktop:language',(_event,value)=>window.dispatchEvent(new CustomEvent('re:caption-language',{detail:value}))); 
   if(typeof installTeamLayout==='function')installTeamLayout({document,window});
   if (typeof installAudio === 'function') installAudio({ipcRenderer,document,window,model:AudioModel,createGraph:createAudioGraph,workletSource:DENOISE_WORKLET});
   installStreamCaptions({ipcRenderer,document,window});

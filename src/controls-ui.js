@@ -3,6 +3,7 @@
   const model = window.ControlsModel, api = window.controlsSettings;
   const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
   const applyTheme=skin=>{document.body.dataset.skin=skins.has(skin)?skin:'pixel';};
+  let receivedLanguage=false;api.onLanguage?.(value=>{receivedLanguage=true;window.RabbitI18n?.setLanguage(value);document.title=(window.RabbitI18n?.text('Controls')||'Controls')+' — rabbit-ears.stream desktop';});
   let receivedTheme=false;
   api.onTheme(skin=>{receivedTheme=true;applyTheme(skin);});
   const list = document.getElementById('list'), saveButton = document.getElementById('save');
@@ -75,6 +76,7 @@
   snapshot = await api.load();
   if (pendingSnapshot) snapshot = pendingSnapshot;
   if(!receivedTheme)applyTheme(snapshot.theme);
+    if(!receivedLanguage)window.RabbitI18n?.setLanguage(snapshot?.language||'en');document.title=(window.RabbitI18n?.text('Controls')||'Controls')+' — rabbit-ears.stream desktop';
   draft = structuredClone(snapshot.config.bindings);original = JSON.stringify(draft);
   document.getElementById('cancel-capture').addEventListener('click',stopCapture);
   document.getElementById('cancel').addEventListener('click',() => api.close());

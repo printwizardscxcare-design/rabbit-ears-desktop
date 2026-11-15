@@ -3,6 +3,7 @@
   const $=id=>document.getElementById(id), api=window.audioSettings, model=window.AudioModel;
   const skins=new Set(['pixel','retro','theatre','stadium','modern','cozy','metal','ivory','gutter']);
   const applyTheme=skin=>{document.body.dataset.skin=skins.has(skin)?skin:'pixel';};
+  let receivedLanguage=false;api.onLanguage?.(value=>{receivedLanguage=true;window.RabbitI18n?.setLanguage(value);document.title=(window.RabbitI18n?.text('Audio')||'Audio')+' — rabbit-ears.stream desktop';});
   let receivedTheme=false;
   api.onTheme(skin=>{receivedTheme=true;applyTheme(skin);});
   let config, presets=[], timer, saving=Promise.resolve(), lastStatus='Original sound', dirty=false;
@@ -48,7 +49,8 @@
     config.current=model.settings(config.current);readouts();dirty=true;message('Saving…');clearTimeout(timer);timer=setTimeout(persist,120);
   }
   try {
-    const snapshot=await api.load();if(!receivedTheme)applyTheme(snapshot.theme);config=model.config(snapshot.config);lastStatus=snapshot.status.text;
+    const snapshot=await api.load();if(!receivedTheme)applyTheme(snapshot.theme);
+    if(!receivedLanguage)window.RabbitI18n?.setLanguage(snapshot?.language||'en');document.title=(window.RabbitI18n?.text('Audio')||'Audio')+' — rabbit-ears.stream desktop';config=model.config(snapshot.config);lastStatus=snapshot.status.text;
     model.BANDS.forEach((frequency,i)=>{
       const band=document.createElement('div');band.className='band';
       const output=document.createElement('output');output.id=`band-value-${i}`;output.htmlFor=`band-${i}`;
