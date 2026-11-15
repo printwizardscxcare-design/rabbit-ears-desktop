@@ -1,15 +1,15 @@
-# Rabbit-Ears.stream Desktop
+# rabbit-ears.stream Desktop
 
 A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
 
-**[Beta 5 is available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.5)** with theme-matched Audio controls, restored app menus, the themed TV bezel in Pop out and Help → Buy the team a beer. Use Help → Check for app updates on Windows, or install the replacement app/package for your platform.
+**[Windows and Apple Silicon Beta 6 are available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.6)** with a lowercase app title, compact cached-page footer, header beer button, permanent Discord link and theme-matched scrollbars. The remaining platform updates are being verified; their working Beta 5 downloads remain below.
 
-## Download · 0.1.0 Beta 5
+## Download
 
 | Your computer | Download | Install instructions |
 | --- | --- | --- |
-| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
-| Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
+| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.6/Rabbit-Ears-stream-Desktop-0.1.0-beta.6-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
+| Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.6/Rabbit-Ears-stream-Desktop-0.1.0-beta.6-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
 | Mac · Intel · macOS 14.2+ | **[Download Intel Mac (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Mac-x64.dmg)** | [Mac guide](docs/MAC.md) |
 | Debian/Ubuntu · Intel/AMD 64-bit | **[Download Debian (.deb)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Debian-amd64.deb)** | [Debian guide](docs/LINUX.md#debian-and-ubuntu) |
 | Fedora · Intel/AMD 64-bit | **[Download Fedora (.rpm)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Fedora-x86_64.rpm)** | [Fedora guide](docs/LINUX.md#fedora) |
