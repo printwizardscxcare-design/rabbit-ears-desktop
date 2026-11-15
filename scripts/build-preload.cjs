@@ -2,11 +2,12 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.join(__dirname, '..');
-const pages = fs.readFileSync(path.join(root, 'src/caption-pages.cjs'), 'utf8');
+const pages = fs.readFileSync(path.join(root, 'src/caption-pages.cjs'), 'utf8').replace("require('./caption-text.cjs')",'CaptionText');
+const captionText = fs.readFileSync(path.join(root,'src/caption-text.cjs'),'utf8');
 const preload = fs.readFileSync(path.join(root, 'src/preload.cjs'), 'utf8');
 const controls = fs.readFileSync(path.join(root, 'src/controls-model.js'), 'utf8');
 const runtime = fs.readFileSync(path.join(root, 'src/controls-runtime.cjs'), 'utf8');
-const cache = fs.readFileSync(path.join(root, 'src/caption-cache.cjs'), 'utf8');
+const cache = fs.readFileSync(path.join(root, 'src/caption-cache.cjs'), 'utf8').replace("require('./caption-text.cjs')",'CaptionText');
 const buffered = fs.readFileSync(path.join(root, 'src/caption-buffer-renderer.cjs'), 'utf8');
 // A self-contained preload is required by Electron's renderer sandbox. This embeds
 // our local pure layout module; it never bundles or evaluates code from the site.
@@ -18,4 +19,4 @@ const buffering = `const {CaptionCache} = (() => {const module = {exports:{}};\n
 const audio = [['AudioModel','audio-model.js'],['createAudioGraph','audio-graph.cjs'],['installAudio','audio-runtime.cjs']].map(([name,file]) =>
   `const ${name} = (() => {const module = {exports:{}};\n${fs.readFileSync(path.join(root,'src',file),'utf8')}\nreturn module.exports;})();\n`).join('');
 const denoiser = `const DENOISE_WORKLET = ${JSON.stringify(['denoise-worklet.js','declick-worklet.js'].map(file=>fs.readFileSync(path.join(root,'src',file),'utf8')).join('\n'))};\n`;
-fs.writeFileSync(path.join(root, 'src/preload.generated.cjs'), denoiser + audio + buffering + bundle);
+fs.writeFileSync(path.join(root, 'src/preload.generated.cjs'), `const CaptionText = (()=>{const module={exports:{}};\n${captionText}\nreturn module.exports;})();\n` + denoiser + audio + buffering + bundle);

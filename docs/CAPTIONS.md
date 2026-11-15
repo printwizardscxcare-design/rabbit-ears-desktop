@@ -23,3 +23,8 @@ Loading tracks are not treated as missing. A failed track permits local fallback
 Machine recognition and translation can mistranslate dialogue and names, especially in noisy material and less well represented languages. Original captions remain available by selecting their language. Local app captions are not uploaded to the site. The translation helper has no network or audio access.
 
 If captions are absent, check that they are On, allow processing time and try Faster recognition. See [Windows](WINDOWS.md), [Mac](MAC.md) or [Linux](LINUX.md) installation instructions.
+
+
+Caption formatting
+
+Escaped provider formatting such as `&lt;i&gt;` is repaired for native stream captions and removed from plain recognition/read-ahead overlays. Dialogue, caption colors and sizes, and all cue clocks remain intact; captions are never inserted as executable HTML.

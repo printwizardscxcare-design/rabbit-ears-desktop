@@ -1,4 +1,5 @@
 'use strict';
+const {plainText} = require('./caption-text.cjs');
 
 // Display complete, non-scrolling subtitle cards. Token positions are supplied by
 // CaptionCues so Windows rolling its transcript does not move the current card.
@@ -11,6 +12,7 @@ class CaptionPages {
   reset() { this.segments = []; this.finished = new Set(); }
 
   receive({ enabled, text, cueId = 0, wordOffset = 0, clearReason = 'reset' }) {
+    text = plainText(text);
     if (!enabled) { this.reset(); return; }
     if (!text) {
       if (clearReason !== 'pause') { this.reset(); return; }

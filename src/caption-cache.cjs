@@ -1,9 +1,11 @@
 'use strict';
+const {plainText} = require('./caption-text.cjs');
 
 class CaptionCache {
   constructor() {this.reset();}
   reset(session = 0) {this.session = session;this.cues = [];}
   add(cue) {
+    if (cue && typeof cue.text === 'string') cue = {...cue,text:plainText(cue.text)};
     if (cue.session !== this.session || typeof cue.text !== 'string' || !cue.text.trim() ||
       !Number.isFinite(cue.startMs) || !Number.isFinite(cue.endMs) || cue.endMs <= cue.startMs) return;
     if (this.cues.some(item => item.startMs === cue.startMs && item.endMs === cue.endMs && item.text === cue.text)) return;

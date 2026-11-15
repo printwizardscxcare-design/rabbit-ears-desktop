@@ -61,7 +61,7 @@ if (location.origin === 'https://rabbit-ears.stream' && process.isMainFrame) {
         const page = bufferedCaptions?.render(availableWidth,measure) || pages.render(availableWidth,measure);
         line.style.fontSize = `${fontSize * page.scale}px`;
         line.style.maxWidth = fullscreen ? '90%' : '86%';
-        line.textContent = page.text;line.dir=['ar','ur'].includes(state.language)?'rtl':'ltr';line.lang=state.language||'en';
+        line.textContent = CaptionText.plainText(page.text);line.dir=['ar','ur'].includes(state.language)?'rtl':'ltr';line.lang=state.language||'en';
         overlay.style.display = state.enabled && page.text && (fullscreen || visibleVideo) ? 'flex' : 'none';
       }
     };
@@ -88,7 +88,7 @@ if (location.origin === 'https://rabbit-ears.stream' && process.isMainFrame) {
     };
     ipcRenderer.on('desktop:captions', (_event, incoming) => {
       if (!incoming || typeof incoming.text !== 'string') return;
-      let text = incoming.text.replace(/\s+/g, ' ').trim();
+      let text = CaptionText.plainText(incoming.text).replace(/\s+/g, ' ').trim();
       state = { enabled: incoming.enabled === true, color: incoming.color === 'yellow' ? 'yellow' : 'white',
         size: [0.8, 1, 1.25, 1.5, 2].includes(incoming.size) ? incoming.size : 1, language:incoming.language||'en', text };
       pages.receive({ enabled: state.enabled, text, cueId: Number.isSafeInteger(incoming.cueId) ? incoming.cueId : 0,

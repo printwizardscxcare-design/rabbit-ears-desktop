@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const vm = require('node:vm');
 const fs = require('node:fs');
 const { CaptionPages } = require('../src/caption-pages.cjs');
+const CaptionText = require('../src/caption-text.cjs');
 const source = fs.readFileSync(require.resolve('../src/preload.cjs'), 'utf8');
 
 function setup({ width = 1920, height = 1080 } = {}) {
@@ -28,7 +29,7 @@ function setup({ width = 1920, height = 1080 } = {}) {
   const document = { documentElement: root, fullscreenElement: null, addEventListener: (name, fn) => events.set(name, fn), querySelector: () => video, querySelectorAll: () => [], createElement: tag => new Element(tag) };
   vm.runInNewContext(source, {
     require: () => ({ ipcRenderer: { on: (name, fn) => ipc.set(name, fn), send: (...args) => sent.push(args) } }),
-    CaptionPages,
+    CaptionPages, CaptionText,
     installStreamCaptions() {},
     ControlsModel: {}, installControls() {},
     CaptionCache: class {}, installCaptionBuffer() {return {cooldown:()=>remaining,waitingForTune:()=>tuning,render:()=>remaining || tuning ? {text:'',scale:1} : null};},
@@ -46,11 +47,15 @@ test('overlay uses transparent background and white or yellow text without rende
   assert.match(overlay.style.cssText, /background:transparent!important/);
   assert.match(overlay.style.cssText, /pointer-events:none/);
   assert.equal(line.style.color, '#ffffff');
-  assert.equal(line.textContent, '<b>These are subtitles</b>');
+  assert.equal(line.textContent, 'These are subtitles');
   assert.equal(overlay.style.display, 'flex');
   assert.equal(overlay.style.bottom, '416px');
   h.send({ enabled: true, color: 'yellow', text: 'Yellow captions' });
   assert.equal(line.style.color, '#ffeb3b');
+  h.send({enabled:true,color:'yellow',text:'&lt;i&gt;- Cerritos,&lt;/i&gt; come in.'});
+  assert.equal(line.textContent,'- Cerritos, come in.');
+  h.send({enabled:true,color:'yellow',text:'2 &lt; 3; <img src=x onerror=alert(1)>'});
+  assert.equal(line.textContent,'2 < 3; <img src=x onerror=alert(1)>');
   h.send({ enabled: false, color: 'yellow', text: '' });
   assert.equal(overlay.style.display, 'none');
 });
