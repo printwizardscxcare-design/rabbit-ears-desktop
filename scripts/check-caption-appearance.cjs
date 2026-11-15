@@ -12,6 +12,11 @@ app.whenReady().then(()=>session.fromPartition('persist:rabbit-ears').protocol.h
 require('../src/main.cjs');
 const wait=ms=>new Promise(r=>setTimeout(r,ms)),timeout=setTimeout(()=>{console.error('Caption appearance check timed out');app.exit(1);},60000);
 async function until(check){for(let i=0;i<150;i++){if(await check())return;await wait(40);}throw Error('Caption appearance state did not settle');}
+async function cancelSettings(window){
+ // Let executeJavaScript return before Cancel tears down its renderer frame.
+ assert.equal(await window.webContents.executeJavaScript('(()=>{const button=document.getElementById("cancel");if(!button)return false;setTimeout(()=>button.click(),25);return true;})()'),true);
+ await until(()=>window.isDestroyed());
+}
 function find(node,id){if(node.attributes?.some((v,i)=>v==='id'&&node.attributes[i+1]===id))return node;for(const child of [...(node.children||[]),...(node.shadowRoots||[])]){const hit=find(child,id);if(hit)return hit;}}
 function span(node){if(node.nodeName==='SPAN')return node;for(const child of [...(node.children||[]),...(node.shadowRoots||[])]){const hit=span(child);if(hit)return hit;}}
 app.whenReady().then(async()=>{try{
@@ -55,19 +60,20 @@ app.whenReady().then(async()=>{try{
   const state=await controls.webContents.executeJavaScript('(()=>{const s=getComputedStyle(document.body);return {colors:[s.getPropertyValue("--panel").trim(),s.getPropertyValue("--yellow").trim()],draft:document.getElementById("list").textContent,dirty:!document.getElementById("save").disabled}})()');
   assert.deepEqual(state.colors,colors);assert.equal(state.draft,draft);assert.equal(state.dirty,true);
  }
- await controls.webContents.executeJavaScript('document.getElementById("cancel").click()');await until(()=>controls.isDestroyed());assert.equal(fs.existsSync(path.join(profile,'controls.json')),false);
+ await cancelSettings(controls);assert.equal(fs.existsSync(path.join(profile,'controls.json')),false);
  item('controls-settings').click();controls=BrowserWindow.getAllWindows().find(w=>w!==player);await until(()=>controls.webContents.executeJavaScript('document.body.dataset.skin==="gutter"&&document.querySelectorAll(".row").length>0').catch(()=>false));assert.equal(await controls.webContents.executeJavaScript('document.getElementById("save").disabled'),true);controls.close();await wait(100);
  await player.webContents.executeJavaScript('document.body.dataset.skin="pixel"');
  console.log('Checking native menus and settings languages');
  item('controls-settings').click();controls=BrowserWindow.getAllWindows().find(w=>w!==player);await until(()=>controls.webContents.executeJavaScript('document.querySelectorAll(".row").length>0').catch(()=>false));
  await controls.webContents.executeJavaScript('document.querySelector(".binding button").click()');
  for(const language of ['es','fr','pt','zh','hi','ar','bn','id','ur']){
+  console.log('Checking settings language '+language);
   await player.webContents.executeJavaScript('document.getElementById("vid").dataset.captionLanguage='+JSON.stringify(language));
   await until(()=>controls.webContents.executeJavaScript('document.documentElement.lang==='+JSON.stringify(language)));
   assert.notEqual(item('captions-off').label,'Off');assert.equal(await controls.webContents.executeJavaScript('document.getElementById("save").disabled'),false,'Language must preserve unsaved bindings');
   assert.equal(await controls.webContents.executeJavaScript('document.documentElement.dir'),['ar','ur'].includes(language)?'rtl':'ltr');
  }
- await controls.webContents.executeJavaScript('document.getElementById("cancel").click()');await until(()=>controls.isDestroyed());assert.equal(fs.existsSync(path.join(profile,'controls.json')),false);
+ await cancelSettings(controls);assert.equal(fs.existsSync(path.join(profile,'controls.json')),false);
  item('audio-settings').click();const localizedAudio=BrowserWindow.getAllWindows().find(w=>w!==player);await until(()=>localizedAudio.webContents.executeJavaScript('document.documentElement.lang==="ur"').catch(()=>false));
  assert.equal(await localizedAudio.webContents.executeJavaScript('document.documentElement.dir'),'rtl');
  await player.webContents.executeJavaScript('document.getElementById("vid").dataset.captionLanguage="en"');await until(()=>localizedAudio.webContents.executeJavaScript('document.documentElement.lang==="en"'));localizedAudio.close();await wait(100);assert.equal(item('captions-off').label,'Off');
