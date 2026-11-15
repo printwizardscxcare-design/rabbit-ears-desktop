@@ -1,6 +1,6 @@
-# rabbit-ears.stream Desktop
+# rabbit-ears.stream desktop
 
-A dedicated desktop app for [Rabbit-Ears.stream](https://rabbit-ears.stream/).
+A dedicated desktop app for [rabbit-ears.stream](https://rabbit-ears.stream/).
 
 **[Windows and Apple Silicon Beta 6 are available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.6)** with a lowercase app title, compact cached-page footer, header beer button, permanent Discord link and theme-matched scrollbars. The remaining platform updates are being verified; their working Beta 5 downloads remain below.
 
