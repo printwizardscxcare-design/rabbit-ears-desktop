@@ -25,6 +25,6 @@ Machine recognition and translation can mistranslate dialogue and names, especia
 If captions are absent, check that they are On, allow processing time and try Faster recognition. See [Windows](WINDOWS.md), [Mac](MAC.md) or [Linux](LINUX.md) installation instructions.
 
 
-Caption formatting
+## Caption formatting
 
 Escaped provider formatting such as `&lt;i&gt;` is repaired for native stream captions and removed from plain recognition/read-ahead overlays. Dialogue, caption colors and sizes, and all cue clocks remain intact; captions are never inserted as executable HTML.

@@ -1,0 +1,137 @@
+{
+  "checkedAt": "2026-11-15T05:20:25.134Z",
+  "sourceTag": "v0.1.0-beta.9",
+  "totalAssets": 14,
+  "checked": [
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Debian-amd64.deb",
+      "sha256": "ffd656b93cf62f03bcd30ecd1c5e4823abf4d20527a221ca6000f9596421e07b",
+      "size": 817833880
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Fedora-x86_64.rpm",
+      "sha256": "253807da0b0563d6d5a83c91f4a88bdd434a57e3c2c71b19a2e38fa1902b3e5d",
+      "size": 790465185
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Arch-x64.pkg.tar.xz",
+      "sha256": "30c5d94556554ee03886781f480180e051eb4657ceabc2b4e58120629aaa5878",
+      "size": 796150984
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-arm64.dmg",
+      "sha256": "a77f722e1492d48225bacbebc4a341aad8a9821090f6ff7ea252adcc1b94ea15",
+      "size": 803212500
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-arm64.zip",
+      "sha256": "f86688fc3671843dbb57604c1e067853b629591b878cecd481709acf927c9db1",
+      "size": 794900233
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-x64.dmg",
+      "sha256": "734888eb439892c65082f5fbd2c082188cc698f2d5e6fce27fb35dc2e48c0d59",
+      "size": 842792542
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-x64.zip",
+      "sha256": "27e71ddb218ef0d832f35cc1a4695cf362c08542ca9e09ce9033ea5f5e034984",
+      "size": 833218816
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Windows-x64-Setup.exe",
+      "sha256": "70ab18e069c56d43d3218f353946e671533729952e0929341727d5fecffcc6ce",
+      "size": 807491708
+    }
+  ],
+  "updateFeedVersion": "0.1.0-beta.9",
+  "releaseUrl": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.9",
+  "publicDownloadChecks": [
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Debian-amd64.deb",
+      "status": 200,
+      "size": 817833880,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Debian-amd64.deb"
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Fedora-x86_64.rpm",
+      "status": 200,
+      "size": 790465185,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Fedora-x86_64.rpm"
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Arch-x64.pkg.tar.xz",
+      "status": 200,
+      "size": 796150984,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Arch-x64.pkg.tar.xz"
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-arm64.dmg",
+      "status": 200,
+      "size": 803212500,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-arm64.dmg"
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-arm64.zip",
+      "status": 200,
+      "size": 794900233,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-arm64.zip"
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-x64.dmg",
+      "status": 200,
+      "size": 842792542,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-x64.dmg"
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-x64.zip",
+      "status": 200,
+      "size": 833218816,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Mac-x64.zip"
+    },
+    {
+      "name": "Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Windows-x64-Setup.exe",
+      "status": 200,
+      "size": 807491708,
+      "url": "https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Windows-x64-Setup.exe"
+    }
+  ],
+  "updater": {
+    "checkedAt": "2026-11-15T05:21:31.005Z",
+    "checks": [
+      {
+        "runningVersion": "0.1.0-beta.8",
+        "offeredVersion": "0.1.0-beta.9",
+        "updateAvailable": true,
+        "autoDownload": false
+      },
+      {
+        "runningVersion": "0.1.0-beta.9",
+        "offeredVersion": "0.1.0-beta.9",
+        "updateAvailable": false,
+        "autoDownload": false
+      }
+    ]
+  },
+  "website": {
+    "checkedAt": "2026-11-15T04:50:07.839Z",
+    "websiteCommit": "63790050e70cd82bc65e0ecd4b5ed754de5b5de1",
+    "publicAssetHasNormalizer": true,
+    "sourceUrl": "https://rabbit-ears.stream/captions/star-trek-lower-decks-complete--86d3b155fda21416.vtt",
+    "sourceSha256": "ec846993c27b1650c8ccd33655769afedaa4aa6cd4d84ad1943385a1c64fc272",
+    "sourceCue": "00:13:56.879 --> 00:13:59.055\n&lt;i&gt;- Cerritos,&lt;/i&gt; come in.",
+    "catalogSha256": "5f47cccc773fe7b2cc542954757ae3053b4d48ce3d483ab383d17b044f567de2",
+    "result": {
+      "text": "- Cerritos, come in.",
+      "nativeItalic": true,
+      "start": 836.879,
+      "end": 839.055,
+      "rawTagsInText": false
+    }
+  },
+  "limitations": [
+    "No actual installed two-version upgrade was performed.",
+    "Windows unsigned; Mac ad-hoc signed and not notarized.",
+    "Website front-page download links remain Beta 8 pending a caption-independent deployment."
+  ]
+}

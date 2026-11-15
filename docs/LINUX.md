@@ -2,31 +2,31 @@
 
 Linux x64 packages target Debian/Ubuntu, Fedora and Arch desktop systems. See the [validation record](VALIDATION.md) for the tested distributions and remaining limits. Direct downloads are on the [front page](../README.md). Use a normal desktop session with audio support; internet is needed for streams.
 
-Download the matching package from the [release page](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.8), then run the appropriate command in the folder containing it.
+Download the matching package from the [release page](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.9), then run the appropriate command in the folder containing it.
 
 ## Debian and Ubuntu
 
-[Download the Debian/Ubuntu .deb package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Debian-amd64.deb). Debian 12+ or a compatible Ubuntu desktop is the target; release validation includes Debian 13.
+[Download the Debian/Ubuntu .deb package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Debian-amd64.deb). Debian 12+ or a compatible Ubuntu desktop is the target; release validation includes Debian 13.
 
 ```sh
-sudo apt install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Debian-amd64.deb
+sudo apt install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Debian-amd64.deb
 ```
 
 ## Fedora
 
-[Download the Fedora .rpm package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Fedora-x86_64.rpm). Release validation uses Fedora 43.
+[Download the Fedora .rpm package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Fedora-x86_64.rpm). Release validation uses Fedora 43.
 
 ```sh
-sudo dnf install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Fedora-x86_64.rpm
+sudo dnf install ./Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Fedora-x86_64.rpm
 ```
 
 ## Arch Linux
 
-[Download the Arch .pkg.tar.xz package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Arch-x64.pkg.tar.xz). Update Arch before installing it:
+[Download the Arch .pkg.tar.xz package](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.9/Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Arch-x64.pkg.tar.xz). Update Arch before installing it:
 
 ```sh
 sudo pacman -Syu
-sudo pacman -U ./Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Arch-x64.pkg.tar.xz
+sudo pacman -U ./Rabbit-Ears-stream-Desktop-0.1.0-beta.9-Arch-x64.pkg.tar.xz
 ```
 
 ## Open the app

@@ -96,3 +96,17 @@ Existing stream tracks are preferred; loading tracks stop the fallback and broke
 The published Windows beta feed was checked using the real electron-updater/Electron HTTP client. It resolved 0.1.0-beta.1 without downloading or allowing downgrade. The installer URL returned HTTP 200 with the expected size and its uploaded SHA-256 matched SHA256SUMS.txt. A later-version installation still needs the beta.2 upgrade test described in RELEASING.md. Mac/Linux currently update through replacement installers/packages, not automatic installation.
 
 Published Beta 8 verification: all 14 release assets present; all eight installer/archive GitHub SHA-256 digests match the four published checksum manifests. The real Electron update check resolves 0.1.0-beta.8 with no download or downgrade. All six live download links return HTTP 200. This does not replace a real installed two-version upgrade test. See releases/beta8-publication.json.
+
+
+## Beta 9 caption formatting repair
+
+- Source tag: `v0.1.0-beta.9`, app commit `008e2ff4a5356d4b7a8e5fd534f16930ddf011fa`.
+- All 122 Node tests pass. Actual Electron checks cover the encoded `Cerritos` cue across twenty white/yellow, size and fullscreen combinations.
+- Windows build, installer feed/checksum checks and UI test passed in run `43678382876`.
+- Mac ARM and Intel build/UI checks passed in run `43678382877`.
+- Linux packages passed clean installation, caption runtime and startup checks on Debian 13, Fedora 43 and Arch in run `43678382916`.
+- Website presentation fix `63790050e70cd82bc65e0ecd4b5ed754de5b5de1` is deployed. The exact source cue remains at 00:13:56.879–00:13:59.055; its original VTT SHA is `ec846993c27b1650c8ccd33655769afedaa4aa6cd4d84ad1943385a1c64fc272`. Five targeted caption tests passed (four in real Chrome), including native formatting, safe literal markup, appearance and uninterrupted playback.
+- The public programming catalog stayed byte-identical at `5f47cccc773fe7b2cc542954757ae3053b4d48ce3d483ab383d17b044f567de2`.
+- This does not constitute a two-version installed-app upgrade test, Mac notarization or a signed Windows release.
+
+Published Beta 9 verification: all 14 release assets are present. The eight installer/archive SHA-256 digests match their four published manifests; all eight public download URLs return HTTP 200 with the expected sizes. The real Electron updater offers Beta 9 to Beta 8 and offers no update or downgrade to Beta 9, with automatic downloads disabled. See [the publication evidence](beta9-publication.json). The website front-page download links remain on Beta 8 pending a separate deployment that does not rebuild programming.
