@@ -12,4 +12,5 @@ if(!fs.existsSync(path.join(model,'model.bin')))run(runtime,['native/translation
 
 run(runtime,['-m','PyInstaller','--noconfirm','--clean','--onedir','--name','caption-translate','--distpath',output,'--workpath',path.join(work,'pyinstaller'),'--specpath',work,'--hidden-import','pkg_resources','--collect-all','ctranslate2','native/translation/helper.py']);
 fs.copyFileSync(path.join(root,'native/translation/NOTICES.md'),path.join(output,'NOTICES.md'));
+run(runtime,['native/translation/copy_licenses.py',output]);
 console.log('Built local caption translation helper and bundled ten-language model.');

@@ -1,0 +1,103 @@
+[
+  {
+    "file": "CTranslate2-4.6.0.txt",
+    "url": "https://raw.githubusercontent.com/OpenNMT/CTranslate2/v4.6.0/LICENSE",
+    "sha256": "54aa79d9fe3c09e67a16dcd95b9e88676405a6ec174efda31036983cf7672ecb"
+  },
+  {
+    "file": "SentencePiece-0.2.0.txt",
+    "url": "https://raw.githubusercontent.com/google/sentencepiece/v0.2.0/LICENSE",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "file": "CPython-3.12.10.txt",
+    "url": "https://raw.githubusercontent.com/python/cpython/v3.12.10/LICENSE",
+    "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+  },
+  {
+    "file": "PyInstaller-6.14.2.txt",
+    "url": "https://raw.githubusercontent.com/pyinstaller/pyinstaller/v6.14.2/COPYING.txt",
+    "sha256": "dcf75fdb959db1e3b41c0f8505069d2ece781b5ec6b3d0a4d30975cfc6580245"
+  },
+  {
+    "file": "oneDNN-3.1.1.txt",
+    "url": "https://raw.githubusercontent.com/oneapi-src/oneDNN/v3.1.1/LICENSE",
+    "sha256": "dd12452e1ae11e3282271aa5895d8175296b83e936a027209f9399d26a407d0f"
+  },
+  {
+    "file": "oneDNN-3.1.1-third-party.txt",
+    "url": "https://raw.githubusercontent.com/oneapi-src/oneDNN/v3.1.1/THIRD-PARTY-PROGRAMS",
+    "sha256": "9117585dfc6b5cd0fafc063312f28a86ec82eb97bf68316dcefcaaa7fc11428e"
+  },
+  {
+    "file": "OpenSSL-3.0.15.txt",
+    "url": "https://raw.githubusercontent.com/openssl/openssl/openssl-3.0.15/LICENSE.txt",
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "file": "PyYAML-6.0.3.txt",
+    "url": "https://raw.githubusercontent.com/yaml/pyyaml/6.0.3/LICENSE",
+    "sha256": "8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4"
+  },
+  {
+    "file": "spdlog.txt",
+    "url": "https://raw.githubusercontent.com/gabime/spdlog/76fb40d95455f249bd70824ecfcae7a8f0930fa3/LICENSE",
+    "sha256": "a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f"
+  },
+  {
+    "file": "cpu_features.txt",
+    "url": "https://raw.githubusercontent.com/google/cpu_features/8a494eb1e158ec2050e5f699a504fbc9b896a43b/LICENSE",
+    "sha256": "af272c1b4dd08dd61d43e001d3134119d03ca7a2b057a64f7355fdf27fbea3dd"
+  },
+  {
+    "file": "ruy.txt",
+    "url": "https://raw.githubusercontent.com/google/ruy/363f252289fb7a1fba1703d99196524698cb884d/LICENSE",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "file": "cutlass.txt",
+    "url": "https://raw.githubusercontent.com/NVIDIA/cutlass/bbe579a9e3beb6ea6626d9227ec32d0dae119a49/LICENSE.txt",
+    "sha256": "6fc6ad419e4d26571a14c7c4d26b65345865c20dd8686ddcf5e8673f54d3d233"
+  },
+  {
+    "file": "cxxopts.txt",
+    "url": "https://raw.githubusercontent.com/jarro2783/cxxopts/c74846a891b3cc3bfa992d588b1295f528d43039/LICENSE",
+    "sha256": "aa324fbe633a96546bebca975fbbab65caa175894bd00cfa13d7335e7363400c"
+  },
+  {
+    "file": "thrust.txt",
+    "url": "https://raw.githubusercontent.com/NVIDIA/thrust/d997cd37a95b0fa2f1a0cd4697fd1188a842fbc8/LICENSE",
+    "sha256": "9e42656b2b02223cee05e2344fee5673d9d5b731ac686ad1e3e543ace6ea6b95"
+  },
+  {
+    "file": "SentencePiece-absl.txt",
+    "url": "https://raw.githubusercontent.com/google/sentencepiece/v0.2.0/third_party/absl/LICENSE",
+    "sha256": "d3e2f59e1d71176dfdb555ece6a41f7a5aa0f52ff21211010ace314f57695f6b"
+  },
+  {
+    "file": "SentencePiece-darts_clone.txt",
+    "url": "https://raw.githubusercontent.com/google/sentencepiece/v0.2.0/third_party/darts_clone/LICENSE",
+    "sha256": "155f59997298ee336602c49f9c1110f268ac394ca2197eb02647a3555935ad52"
+  },
+  {
+    "file": "SentencePiece-esaxx.txt",
+    "url": "https://raw.githubusercontent.com/google/sentencepiece/v0.2.0/third_party/esaxx/LICENSE",
+    "sha256": "7c28553d1d3312d65fe309f76a22ebaf33a3d76c8c1e3b98a88ee4654ecb53db"
+  },
+  {
+    "file": "SentencePiece-protobuf-lite.txt",
+    "url": "https://raw.githubusercontent.com/google/sentencepiece/v0.2.0/third_party/protobuf-lite/LICENSE",
+    "sha256": "6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d"
+  },
+  {
+    "file": "cuDNN-9.1.0.html",
+    "url": "https://docs.nvidia.com/deeplearning/cudnn/backend/v9.1.0/reference/eula.html",
+    "sha256": "f7d7aa0e25b0ac315dfc050d32f1cfd041b446e32ff4d0aa21c6ffa56f32a178"
+  },
+  {
+    "file": "Intel-OpenMP-2023.0.0-LICENSE.txt",
+    "url": "https://files.pythonhosted.org/packages/38/3e/8babfee805667ca0c27314db15fb8f2600db500ac5692dce690c77dc738c/intel_openmp-2023.0.0-py2.py3-none-manylinux1_x86_64.whl",
+    "member": "intel_openmp-2023.0.0.dist-info/LICENSE.txt",
+    "sha256": "c70274d93d970f90859bd5da38f984ec518521ffab51e8aee4521743b6ecaf7a"
+  }
+]
