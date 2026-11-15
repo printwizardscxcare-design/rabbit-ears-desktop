@@ -4,7 +4,7 @@ Captions start on. Rabbit Ears uses a working stream subtitle track first and av
 
 ## Language
 
-Choose **Settings (gear) → Captions → Language** for English, Mandarin Chinese, Hindi, Spanish, Arabic, French, Bengali, Portuguese, Indonesian or Urdu. The choice stays in the browser profile and syncs when signed in with Discord.
+Choose **Settings (gear) → App language** for Automatic or English, Mandarin Chinese, Hindi, Spanish, Arabic, French, Bengali, Portuguese, Indonesian or Urdu. The selection also changes the interface, native menus, Audio and Controls windows, and channel-logo lettering. Automatic uses a supported device language, with a broad country fallback; an explicit saved choice takes priority. It never requests GPS access. The choice stays in the browser profile and syncs when signed in with Discord.
 
 The website plays saved translations as they finish in Skippy's separate queue. It keeps the original captions when the selected language is not ready. Website playback runs no live speech recognition or translation. Caption updates never change programming.
 

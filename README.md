@@ -2,24 +2,24 @@
 
 A dedicated desktop app for [rabbit-ears.stream](https://rabbit-ears.stream/).
 
-**[Windows and Apple Silicon Beta 6 are available](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.6)** with a lowercase app title, compact cached-page footer, header beer button, permanent Discord link and theme-matched scrollbars. The remaining platform updates are being verified; their working Beta 5 downloads remain below.
+**Beta 8** adds an Automatic language choice, a ten-language interface and local caption translation on Windows, Mac and Linux. Channel logos include translated lettering; Arabic and Urdu use right-to-left layouts.
 
 ## Download
 
 | Your computer | Download | Install instructions |
 | --- | --- | --- |
-| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.6/Rabbit-Ears-stream-Desktop-0.1.0-beta.6-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
-| Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.6/Rabbit-Ears-stream-Desktop-0.1.0-beta.6-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
-| Mac · Intel · macOS 14.2+ | **[Download Intel Mac (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Mac-x64.dmg)** | [Mac guide](docs/MAC.md) |
-| Debian/Ubuntu · Intel/AMD 64-bit | **[Download Debian (.deb)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Debian-amd64.deb)** | [Debian guide](docs/LINUX.md#debian-and-ubuntu) |
-| Fedora · Intel/AMD 64-bit | **[Download Fedora (.rpm)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Fedora-x86_64.rpm)** | [Fedora guide](docs/LINUX.md#fedora) |
-| Arch Linux · Intel/AMD 64-bit | **[Download Arch (.pkg.tar.xz)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.5/Rabbit-Ears-stream-Desktop-0.1.0-beta.5-Arch-x64.pkg.tar.xz)** | [Arch guide](docs/LINUX.md#arch-linux) |
+| Windows 10/11 · Intel/AMD 64-bit | **[Download Windows installer (.exe)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Windows-x64-Setup.exe)** | [Windows guide](docs/WINDOWS.md) |
+| Mac · Apple Silicon · macOS 14.2+ | **[Download Apple Silicon (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-arm64.dmg)** | [Mac guide](docs/MAC.md) |
+| Mac · Intel · macOS 14.2+ | **[Download Intel Mac (.dmg)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Mac-x64.dmg)** | [Mac guide](docs/MAC.md) |
+| Debian/Ubuntu · Intel/AMD 64-bit | **[Download Debian (.deb)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Debian-amd64.deb)** | [Debian guide](docs/LINUX.md#debian-and-ubuntu) |
+| Fedora · Intel/AMD 64-bit | **[Download Fedora (.rpm)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Fedora-x86_64.rpm)** | [Fedora guide](docs/LINUX.md#fedora) |
+| Arch Linux · Intel/AMD 64-bit | **[Download Arch (.pkg.tar.xz)](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/download/v0.1.0-beta.8/Rabbit-Ears-stream-Desktop-0.1.0-beta.8-Arch-x64.pkg.tar.xz)** | [Arch guide](docs/LINUX.md#arch-linux) |
 
-[All release files and checksums](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.5) · [Caption help](docs/CAPTIONS.md) · [Audio settings](docs/AUDIO.md) · [Report a problem](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/issues)
+[All release files and checksums](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/releases/tag/v0.1.0-beta.8) · [Caption help](docs/CAPTIONS.md) · [Audio settings](docs/AUDIO.md) · [Report a problem](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/issues)
 
 Install the package for your computer, rather than GitHub’s Source code ZIP. The Windows beta is unsigned; macOS builds are ad-hoc signed and not Apple-notarized. Internet is required for streams. Speech models are included in the installers.
 
-The live TV guide, radio, themes, Discord login and account preferences come from Rabbit Ears.
+The live TV guide, radio, themes, Discord login and account preferences come from Rabbit Ears. **Settings → App language** changes the interface, native menus, Audio and Controls windows and subtitle language. Automatic uses your supported device language, then a broad country fallback; a saved manual choice takes priority. It never requests GPS access.
 
 ## Captions
 
@@ -27,10 +27,10 @@ Captions are on by default. Existing stream subtitle tracks are used first, incl
 
 When no usable subtitles exist, the selected local engine fills in:
 
-- **Whisper (default):** the engine and tiny/base English models are bundled; no account, model download, microphone setup or separate install. Recognition reads the public Archive file and follows media timestamps. Playback is never paused or rewound to prepare captions. Slower computers may show captions late.
+- **Whisper (default):** the engine and multilingual tiny/base speech models and a local translation model are bundled; no account, model download, microphone setup or separate install. Recognition reads the public Archive file and follows media timestamps. Playback is never paused or rewound to prepare captions. Slower computers may show captions late.
 - **Windows Live Captions:** optional on Windows 11 22H2 or newer. Windows may need its own speech-language files on first use. This option reads Windows' live-caption output, so other audible apps may be included.
 
-The app Captions menu controls On/Off, the fallback engine, size, color, timing and recognition speed. Size and color apply equally to supplied subtitle tracks and local engine captions. The site player’s CC color choices also update the app preference, without writing to the website’s saved profile. Burned-in text cannot be switched off. Whisper's bundled models recognize English; they do not translate foreign speech. Captions remain local and are not uploaded to the site.
+The app Captions menu controls On/Off, the fallback engine, size, color, timing and recognition speed. Size and color apply equally to supplied subtitle tracks and local engine captions. The site player’s CC color choices also update the app preference, without writing to the website’s saved profile. Burned-in text cannot be switched off. Whisper detects the spoken language and produces English text; a bundled translation model converts that text into your selected language. English, Mandarin Chinese, Hindi, Spanish, Arabic, French, Bengali, Portuguese, Indonesian and Urdu are supported. Recognition and translation can be imperfect. Captions remain local and are not uploaded to the site.
 
 ## Audio and controls
 

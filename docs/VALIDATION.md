@@ -1,5 +1,22 @@
 # Desktop beta validation
 
+## Beta 8: language release
+
+The local suite passes 119 Node checks. Real Electron checks pass interface and native-menu switching across all nine translated languages, Arabic/Urdu right-to-left layout, Audio and Controls windows, an unsaved Controls draft, nine themes, 20 supplied/local caption appearance comparisons, and compact/Return behavior. Local translation checks cover all ten output languages, Unicode, cache reuse and Spanish-to-English translation.
+
+Live website checks confirm translated interface text and actual translated SVG channel logos at desktop and phone widths, Automatic device-language selection, saved manual choices and Arabic/Urdu layout without page overflow. All 16 translated caption files available at the check matched their original source hashes and exact cue timing. The published program catalog remained byte-for-byte unchanged (SHA-256 `5f47cccc773fe7b2cc542954757ae3053b4d48ce3d483ab383d17b044f567de2`). These website checks do not establish desktop installer success.
+
+Beta 8 packaged checks passed on Windows, Intel Mac, Apple Silicon Mac, Debian 13, Fedora 43 and Arch. These platform jobs cover the bundled speech/translation engines and their model files; the Mac jobs include signing checks, and the Linux distribution jobs include package installation/startup checks.
+
+- [Windows packaged checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43665040837)
+- [Intel Mac packaged checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43665068933/job/132662510957)
+- [Apple Silicon Mac packaged checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43665575330/job/132664070234)
+- [Linux build and all three distribution checks](https://github.com/printwizardscxcare-design/rabbit-ears-desktop/actions/runs/43665071106)
+
+The first Mac run passed Intel while its Apple Silicon job failed; the subsequent Apple Silicon job passed. Each architecture must use its matching verified artifact. Publication still checks release-file digests and public URLs before download links are updated; passed source/local checks alone do not replace those checks.
+
+Windows remains unsigned. Mac builds are ad-hoc signed, not Apple-notarized. Mac/Linux updates require a replacement app/package. A real upgrade between two installed published Windows versions has not been completed.
+
 ## Beta 5
 
 Windows passed all 117 Node checks, real Electron menu/Audio-theme/caption/compact tests, packaged speech/audio helpers and installer-integrity checks. The published current-version update feed resolves Beta 5 without downloading or downgrading. Help now includes the team support page. A full installed-version upgrade remains a separate outstanding check.
