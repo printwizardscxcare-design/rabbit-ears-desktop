@@ -4,6 +4,7 @@
 const { ipcRenderer } = require('electron');
 if(process.isMainFrame && typeof installWindowChrome==='function')installWindowChrome({ipcRenderer,document,window});
 if (location.origin === 'https://rabbit-ears.stream' && process.isMainFrame) {
+  if(typeof installTeamLayout==='function')installTeamLayout({document,window});
   if (typeof installAudio === 'function') installAudio({ipcRenderer,document,window,model:AudioModel,createGraph:createAudioGraph,workletSource:DENOISE_WORKLET});
   installStreamCaptions({ipcRenderer,document,window});
   let bufferedCaptions;

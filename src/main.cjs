@@ -33,7 +33,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
 
   function loadHome() {
     failed = false;
-    win.loadURL(HOME).catch(() => {}); // did-fail-load owns the recovery screen.
+    win.loadURL(HOME,{extraHeaders:'Cache-Control: no-cache\r\nPragma: no-cache'}).catch(() => {}); // did-fail-load owns the recovery screen.
   }
 
   function showRecovery() {
@@ -311,7 +311,7 @@ if (!app.requestSingleInstanceLock()) { app.quit(); } else {
     });
     contents.on('render-process-gone', showRecovery);
 
-    const reload = () => failed ? loadHome() : contents.reload();
+    const reload = () => failed ? loadHome() : contents.reloadIgnoringCache();
     const startLiveCaptions = async () => {
       await setOverlayEnabled(false);
       // A fixed OS executable, never a path or command supplied by the website.
