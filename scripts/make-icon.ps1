@@ -1,35 +1,35 @@
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
+# Rebuild Windows sizes from the approved PNG. Never redraw the logo here.
 $assetDirectory = Join-Path $PSScriptRoot '../assets'
-New-Item -ItemType Directory -Path $assetDirectory -Force | Out-Null
-$bitmap = New-Object System.Drawing.Bitmap 256,256
-$graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-$graphics.SmoothingMode = 'AntiAlias'
-$graphics.Clear([System.Drawing.Color]::FromArgb(28,10,87))
-$accent = New-Object System.Drawing.Pen ([System.Drawing.Color]::FromArgb(216,255,128)),12
-$screenBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(216,255,128))
-$darkBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(28,10,87))
-$graphics.DrawLine($accent,98,40,127,67)
-$graphics.DrawLine($accent,157,40,128,67)
-$graphics.FillRectangle($screenBrush,40,68,176,142)
-$graphics.FillRectangle($darkBrush,53,81,132,116)
-$graphics.FillEllipse($screenBrush,194,100,10,10)
-$graphics.FillEllipse($screenBrush,194,128,10,10)
-$graphics.DrawLine($accent,80,219,176,219)
-$graphics.DrawLine($accent,128,205,128,220)
-$graphics.DrawLine($accent,78,126,78,156)
-$graphics.DrawLine($accent,106,112,106,156)
-$graphics.DrawLine($accent,134,100,134,156)
-$graphics.DrawLine($accent,162,119,162,156)
-$pngPath = Join-Path $assetDirectory 'icon.png'
-$bitmap.Save($pngPath,[System.Drawing.Imaging.ImageFormat]::Png)
-$pngBytes = [System.IO.File]::ReadAllBytes($pngPath)
-$iconPath = Join-Path $assetDirectory 'icon.ico'
-$writer = New-Object System.IO.BinaryWriter ([System.IO.File]::Create($iconPath))
+$source = [System.Drawing.Bitmap]::FromFile((Join-Path $assetDirectory 'icon.png'))
+$images = @()
 try {
-  $writer.Write([uint16]0); $writer.Write([uint16]1); $writer.Write([uint16]1)
-  $writer.Write([byte]0); $writer.Write([byte]0); $writer.Write([byte]0); $writer.Write([byte]0)
-  $writer.Write([uint16]1); $writer.Write([uint16]32)
-  $writer.Write([uint32]$pngBytes.Length); $writer.Write([uint32]22)
-  $writer.Write($pngBytes)
-} finally { $writer.Dispose(); $graphics.Dispose(); $bitmap.Dispose(); $accent.Dispose(); $screenBrush.Dispose(); $darkBrush.Dispose() }
+  foreach ($size in @(16,24,32,48,64,128,256)) {
+    $bitmap = New-Object System.Drawing.Bitmap $size,$size
+    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+    $stream = New-Object System.IO.MemoryStream
+    try {
+      $graphics.Clear([System.Drawing.Color]::Transparent)
+      $graphics.InterpolationMode = 'NearestNeighbor'
+      $graphics.PixelOffsetMode = 'Half'
+      $graphics.DrawImage($source,0,0,$size,$size)
+      $bitmap.Save($stream,[System.Drawing.Imaging.ImageFormat]::Png)
+      $images += ,@{Size=$size; Bytes=$stream.ToArray()}
+    } finally { $graphics.Dispose(); $bitmap.Dispose(); $stream.Dispose() }
+  }
+  $writer = New-Object System.IO.BinaryWriter ([System.IO.File]::Create((Join-Path $assetDirectory 'icon.ico')))
+  try {
+    $writer.Write([uint16]0); $writer.Write([uint16]1); $writer.Write([uint16]$images.Count)
+    $offset = 6 + 16 * $images.Count
+    foreach ($entry in $images) {
+      $dimension = if ($entry.Size -eq 256) { 0 } else { $entry.Size }
+      $writer.Write([byte]$dimension); $writer.Write([byte]$dimension)
+      $writer.Write([byte]0); $writer.Write([byte]0)
+      $writer.Write([uint16]1); $writer.Write([uint16]32)
+      $writer.Write([uint32]$entry.Bytes.Length); $writer.Write([uint32]$offset)
+      $offset += $entry.Bytes.Length
+    }
+    foreach ($entry in $images) { $writer.Write([byte[]]$entry.Bytes) }
+  } finally { $writer.Dispose() }
+} finally { $source.Dispose() }

@@ -1,5 +1,7 @@
 # rabbit-ears.stream desktop
 
+<p align="center"><img src="assets/icon.png" width="192" alt="Rabbit Ears rabbit-skull television logo in 8-bit Gruvbox colors"></p>
+
 A dedicated desktop app for [rabbit-ears.stream](https://rabbit-ears.stream/).
 
 **Beta 9** repairs escaped subtitle formatting so tags such as `<i>` stay out of the visible captions. It includes an Automatic language choice, a ten-language interface and local caption translation on Windows, Mac and Linux. Channel logos include translated lettering; Arabic and Urdu use right-to-left layouts.
